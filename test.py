@@ -32,7 +32,6 @@ accountId = D['accountId'];
 def createRadioTab(y):
 	 return """ 
 		{
-			"tabLabel": "foo""" + str(y) + '"' + """,
 			"anchorString": null,
 			"anchorXOffset": null,
 			"anchorYOffset": null,
@@ -40,7 +39,7 @@ def createRadioTab(y):
 			"anchorUnits": null,
 			"pageNumber": "1",
 			"selected": false,
-			"value": "Radio",
+			"value": "Radio""" + str(y) + '"' + """,
 			"xPosition": "204",
 		    "yPosition": """ + '"' + str(y) + '"}'  
 
@@ -60,8 +59,8 @@ def createInitialTab(y):
 		  "anchorYOffset": null,
 		  "anchorIgnoreIfNotPresent": null,
 		  "anchorUnits": null,
-		  "conditionalParentLabel": "foo""" + str(y) + '"' + """,
-		  "conditionalParentValue": "on",
+		  "conditionalParentLabel": "Radio Group 1",
+		  "conditionalParentValue": "Radio""" + str(y) + '"' + """,
 		  "documentId": "1",
 		  "pageNumber": "1",
 		  "recipientId": "1",
@@ -108,6 +107,26 @@ def getTabsJson ():
 		"initialHereTabs": [ """ + createInitialTabs() + ' ],'
  
 #construct the body of the request in JSON format
+envelopeDef = """
+{"emailBlurb":"This comes from Python",
+"emailSubject":"API Call for adding signature request to document and sending",
+"documents":[{
+"documentId":"1",
+"name":"test.txt"}],
+"recipients":{
+"signers":[{
+"email": """ + '"' + username + '"' + """,
+"name":"Name",
+"recipientId":"1",
+"tabs":{ """ + getTabsJson() + """
+"signHereTabs":[{
+"xPosition":"100",
+"yPosition":"100",
+"documentId":"1",
+"pageNumber":"1" }]}}]},
+"status":"sent"}";
+"""
+
 envelopeDef = "{\"emailBlurb\":\"This comes from Python\"," + \
 "\"emailSubject\":\"API Call for adding signature request to document and sending\"," + \
 "\"documents\":[{" + \
@@ -126,6 +145,7 @@ getTabsJson() + \
 "\"documentId\":\"1\"," + \
 "\"pageNumber\":\"1\"" + "}]}}]}," + \
 "\"status\":\"sent\"}";
+
 
 print envelopeDef
  
