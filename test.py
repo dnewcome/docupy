@@ -29,7 +29,61 @@ loginInfo = data.get('loginAccounts');
 D = loginInfo[0];
 baseUrl = D['baseUrl'];
 accountId = D['accountId'];
- 
+def createRadioTab(y):
+	 return """ 
+		{
+			"tabLabel": "foo""" + str(y) + '"' + """,
+			"anchorString": null,
+			"anchorXOffset": null,
+			"anchorYOffset": null,
+			"anchorIgnoreIfNotPresent": null,
+			"anchorUnits": null,
+			"pageNumber": "1",
+			"selected": false,
+			"value": "Radio",
+			"xPosition": "204",
+		    "yPosition": """ + '"' + str(y) + '"}'  
+
+def createRadioTabs():
+	retval = ''
+	for x in range(0,30):
+		retval += createRadioTab(x*20) 
+		if( x != 30 ):
+			retval += ','
+	return retval
+
+def createInitialTab(y):
+	return """ 
+		{
+		  "anchorString": null,
+		  "anchorXOffset": null,
+		  "anchorYOffset": null,
+		  "anchorIgnoreIfNotPresent": null,
+		  "anchorUnits": null,
+		  "conditionalParentLabel": "foo""" + str(y) + '"' + """,
+		  "conditionalParentValue": "on",
+		  "documentId": "1",
+		  "pageNumber": "1",
+		  "recipientId": "1",
+		  "templateLocked": false,
+		  "templateRequired": false,
+		  "xPosition": "249",
+		  "yPosition": """ + '"' + str(y) + '"' """,
+		  "name": "Initial Here",
+		  "optional": false,
+		  "scaleValue": 1,
+		  "tabLabel": "Initial 5" 
+		}
+	"""
+
+def createInitialTabs():
+	retval = ''
+	for x in range(0,30):
+		retval += createInitialTab(x*20) 
+		if( x != 30 ):
+			retval += ','
+	return retval
+
 #--- display results
 print ("baseUrl = %s\naccountId = %s" % (baseUrl, accountId));
  
@@ -43,19 +97,7 @@ def getTabsJson ():
 		  "conditionalParentValue": null,
 		  "documentId": "1",
 		  "groupName": "Radio Group 1",
-		  "radios": [
-		  {
-			"anchorString": null,
-			"anchorXOffset": null,
-			"anchorYOffset": null,
-			"anchorIgnoreIfNotPresent": null,
-			"anchorUnits": null,
-			"pageNumber": "1",
-			"selected": false,
-			"value": "Radio",
-			"xPosition": "234",
-			"yPosition": "159"
-		  }
+		  "radios": [ """ + createRadioTabs() + """
 		  ],
 		  "recipientId": "1",
 		  "requireInitialOnSharedChange": false,
@@ -63,26 +105,7 @@ def getTabsJson ():
 		  "templateLocked": false,
 		  "templateRequired": false
 		}],	
-		"initialHereTabs": [{
-		  "anchorString": null,
-		  "anchorXOffset": null,
-		  "anchorYOffset": null,
-		  "anchorIgnoreIfNotPresent": null,
-		  "anchorUnits": null,
-		  "conditionalParentLabel": null,
-		  "conditionalParentValue": null,
-		  "documentId": "1",
-		  "pageNumber": "1",
-		  "recipientId": "1",
-		  "templateLocked": false,
-		  "templateRequired": false,
-		  "xPosition": "249",
-		  "yPosition": "15",
-		  "name": "Initial Here",
-		  "optional": false,
-		  "scaleValue": 1,
-		  "tabLabel": "Initial 5" }],
-	"""
+		"initialHereTabs": [ """ + createInitialTabs() + ' ],'
  
 #construct the body of the request in JSON format
 envelopeDef = "{\"emailBlurb\":\"This comes from Python\"," + \
