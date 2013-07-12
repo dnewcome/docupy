@@ -1,157 +1,121 @@
 # DocuSign API Walkthrough 04 (PYTHON) - Add Signature Request to Document and Send
-import sys, httplib2, json;
- 
+import sys, httplib2, json
+import Docusign
+
 # Enter your info:
 username = "dnewcome@circleup.com";
 password = "9a2UpOoBtZC";
 integratorKey = "CIRC-701b9303-d868-488b-9db0-d561dd5eb9c0";
- 
-authenticateStr = "<DocuSignCredentials>" \
-"<Username>" + username + "</Username>" \
-"<Password>" + password + "</Password>" \
-"<IntegratorKey>" + integratorKey + "</IntegratorKey>" \
-"</DocuSignCredentials>";
-#
-# STEP 1 - Login
-#
-url = 'https://demo.docusign.net/restapi/v2/login_information';
-headers = {'X-DocuSign-Authentication': authenticateStr, 'Accept': 'application/json'};
-http = httplib2.Http();
-response, content = http.request(url, 'GET', headers=headers);
- 
-status = response.get('status');
-if (status != '200'):
-	print("Error calling webservice, status is: %s" % status); sys.exit();
- 
-# get the baseUrl and accountId from the response body
-data = json.loads(content);
+
+data = Docusign.login( username, password, integratorKey )
+
 loginInfo = data.get('loginAccounts');
 D = loginInfo[0];
 baseUrl = D['baseUrl'];
 accountId = D['accountId'];
+
 def createRadioTab(y):
-	 return """ 
-		{
-			"anchorString": null,
-			"anchorXOffset": null,
-			"anchorYOffset": null,
-			"anchorIgnoreIfNotPresent": null,
-			"anchorUnits": null,
-			"pageNumber": "1",
-			"selected": false,
-			"value": "Radio""" + str(y) + '"' + """,
-			"xPosition": "204",
-		    "yPosition": """ + '"' + str(y) + '"}'  
+     return {
+         "anchorString": None,
+         "anchorXOffset": None,
+         "anchorYOffset": None,
+         "anchorIgnoreIfNotPresent": None,
+         "anchorUnits": None,
+         "pageNumber": "1",
+         "selected": None,
+         "value": "Radio" + str(y),
+         "xPosition": "204",
+         "yPosition": str(y)
+     }
+
 
 def createRadioTabs():
-	retval = ''
-	for x in range(0,30):
-		retval += createRadioTab(x*20) 
-		if( x != 30 ):
-			retval += ','
-	return retval
+    retval = []
+    for x in range(0,30):
+        retval.append(createRadioTab(x*20))
+    return retval
 
 def createInitialTab(y):
-	return """ 
-		{
-		  "anchorString": null,
-		  "anchorXOffset": null,
-		  "anchorYOffset": null,
-		  "anchorIgnoreIfNotPresent": null,
-		  "anchorUnits": null,
-		  "conditionalParentLabel": "Radio Group 1",
-		  "conditionalParentValue": "Radio""" + str(y) + '"' + """,
-		  "documentId": "1",
-		  "pageNumber": "1",
-		  "recipientId": "1",
-		  "templateLocked": false,
-		  "templateRequired": false,
-		  "xPosition": "249",
-		  "yPosition": """ + '"' + str(y) + '"' """,
-		  "name": "Initial Here",
-		  "optional": false,
-		  "scaleValue": 1,
-		  "tabLabel": "Initial 5" 
-		}
-	"""
+    return {
+          "anchorString": None,
+          "anchorXOffset": None,
+          "anchorYOffset": None,
+          "anchorIgnoreIfNotPresent": None,
+          "anchorUnits": None,
+          "conditionalParentLabel": "Radio Group 1",
+          "conditionalParentValue": "Radio" + str(y),
+          "documentId": "1",
+          "pageNumber": "1",
+          "recipientId": "1",
+          "templateLocked": False ,
+          "templateRequired": False,
+          "xPosition": "249",
+          "yPosition": str(y),
+          "name": "Initial Here",
+          "optional": False,
+          "scaleValue": 1,
+          "tabLabel": "Initial 5"
+        }
 
 def createInitialTabs():
-	retval = ''
-	for x in range(0,30):
-		retval += createInitialTab(x*20) 
-		if( x != 30 ):
-			retval += ','
-	return retval
+    retval = []
+    for x in range(0,30):
+        retval.append(createInitialTab(x*20))
+    return retval
 
 #--- display results
 print ("baseUrl = %s\naccountId = %s" % (baseUrl, accountId));
- 
-#
-# STEP 2 - Add Signature Request to Document and Send
-#
-def getTabsJson ():
-	return """
-		"radioGroupTabs": [{
-		  "conditionalParentLabel": null,
-		  "conditionalParentValue": null,
-		  "documentId": "1",
-		  "groupName": "Radio Group 1",
-		  "radios": [ """ + createRadioTabs() + """
-		  ],
-		  "recipientId": "1",
-		  "requireInitialOnSharedChange": false,
-		  "shared": false,
-		  "templateLocked": false,
-		  "templateRequired": false
-		}],	
-		"initialHereTabs": [ """ + createInitialTabs() + ' ],'
- 
-#construct the body of the request in JSON format
-envelopeDef = """
-{"emailBlurb":"This comes from Python",
-"emailSubject":"API Call for adding signature request to document and sending",
-"documents":[{
-"documentId":"1",
-"name":"test.txt"}],
-"recipients":{
-"signers":[{
-"email": """ + '"' + username + '"' + """,
-"name":"Name",
-"recipientId":"1",
-"tabs":{ """ + getTabsJson() + """
-"signHereTabs":[{
-"xPosition":"100",
-"yPosition":"100",
-"documentId":"1",
-"pageNumber":"1" }]}}]},
-"status":"sent"}";
-"""
 
-envelopeDef = "{\"emailBlurb\":\"This comes from Python\"," + \
-"\"emailSubject\":\"API Call for adding signature request to document and sending\"," + \
-"\"documents\":[{" + \
-"\"documentId\":\"1\"," + \
-"\"name\":\"test.txt\"}]," + \
-"\"recipients\":{" + \
-"\"signers\":[{" + \
-"\"email\":\"" + username + "\"," + \
-"\"name\":\"Name\"," + \
-"\"recipientId\":\"1\"," + \
-"\"tabs\":{" + \
-getTabsJson() + \
-"\"signHereTabs\":[{" + \
-"\"xPosition\":\"100\"," + \
-"\"yPosition\":\"100\"," + \
-"\"documentId\":\"1\"," + \
-"\"pageNumber\":\"1\"" + "}]}}]}," + \
-"\"status\":\"sent\"}";
+def getTabsJson ():
+    return {
+        "radioGroupTabs": [{
+        "conditionalParentLabel": None,
+        "conditionalParentValue": None,
+        "documentId": "1",
+        "groupName": "Radio Group 1",
+        "radios": createRadioTabs(),
+        "recipientId": "1",
+        "requireInitialOnSharedChange": False,
+        "shared": False,
+        "templateLocked": False,
+        "templateRequired": False
+        }],
+        "initialHereTabs": createInitialTabs()
+    }
+
+#construct the body of the request in JSON format
+envelopeDef = json.dumps(
+    {
+        "emailBlurb":"This comes from Python",
+        "emailSubject":"API Call for adding signature request to document and sending",
+        "documents":[{
+            "documentId":"1",
+            "name":"test.txt"
+        }],
+        "recipients":{
+            "signers":[{
+                "email": username,
+                "name":"Name",
+                "recipientId":"1",
+                "tabs": getTabsJson(),
+                "signHereTabs":[{
+                    "xPosition":"100",
+                    "yPosition":"100",
+                    "documentId":"1",
+                    "pageNumber":"1"
+                }]
+            }]
+        },
+        "status":"sent"
+    })
 
 
 print envelopeDef
- 
+
+
 # convert the file into a string and add to the request body
 fileContents = open("test.txt", "r").read();
- 
+
 requestBody = "\r\n\r\n--BOUNDARY\r\n" + \
 "Content-Type: application/json\r\n" + \
 "Content-Disposition: form-data\r\n" + \
@@ -162,17 +126,9 @@ envelopeDef + "\r\n\r\n--BOUNDARY\r\n" + \
 "\r\n" + \
 fileContents + "\r\n" + \
 "--BOUNDARY--\r\n\r\n";
- 
-# append "/envelopes" to the baseUrl and use in the request
-url = baseUrl + "/envelopes";
-headers = {'X-DocuSign-Authentication': authenticateStr, 'Content-Type': 'multipart/form-data; boundary=BOUNDARY', 'Accept': 'application/json'};
-http = httplib2.Http();
-response, content = http.request(url, 'POST', headers=headers, body=requestBody);
-status = response.get('status');
-if (status != '201'):
-	print("Error calling webservice, status is: %s\nError description - %s" % (status, content)); sys.exit();
-data = json.loads(content);
-envId = data.get('envelopeId');
- 
+
+
+envId = Docusign.sendEnvelope( baseUrl, requestBody, username, password, integratorKey ).get('envelopeId')
+
 #--- display results
 print ("Document sent! EnvelopeId is: %s\n" % envId);
