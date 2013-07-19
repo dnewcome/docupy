@@ -40,3 +40,38 @@ def sendEnvelope( baseUrl, requestBody, username, password, integratorKey ):
     if (status != '201'):
         print("Error calling webservice, status is: %s\nError description - %s" % (status, content)); sys.exit();
     return json.loads(content);
+
+def sendTemplate( baseUrl, requestBody, username, password, integratorKey ):
+    authenticateStr = authString( username, password, integratorKey )
+    url = baseUrl + "/templates";
+    headers = {'X-DocuSign-Authentication': authenticateStr, 'Content-Type': 'multipart/form-data; boundary=BOUNDARY', 'Accept': 'application/json'};
+    http = httplib2.Http();
+    response, content = http.request(url, 'POST', headers=headers, body=requestBody);
+    status = response.get('status');
+    if (status != '201'):
+        print("Error calling webservice, status is: %s\nError description - %s" % (status, content)); sys.exit();
+    return json.loads(content);
+
+def getTemplates():
+    authenticateStr = authString( username, password, integratorKey )
+    url = baseUrl + "/templates";
+    #url = baseUrl + "/templates";
+    headers = {'X-DocuSign-Authentication': authenticateStr, 'Content-Type': 'multipart/form-data; boundary=BOUNDARY', 'Accept': 'application/json'};
+    http = httplib2.Http();
+    response, content = http.request(url, 'GET', headers=headers, body=requestBody);
+    status = response.get('status');
+    if (status != '201'):
+        print("Error calling webservice, status is: %s\nError description - %s" % (status, content)); sys.exit();
+    return json.loads(content);
+
+def getTemplate( templateId ):
+    authenticateStr = authString( username, password, integratorKey )
+    url = baseUrl + "/templates";
+    headers = {'X-DocuSign-Authentication': authenticateStr, 'Content-Type': 'multipart/form-data; boundary=BOUNDARY', 'Accept': 'application/json'};
+    http = httplib2.Http();
+    response, content = http.request(url, 'GET', headers=headers, body=requestBody);
+    status = response.get('status');
+    if (status != '201'):
+        print("Error calling webservice, status is: %s\nError description - %s" % (status, content)); sys.exit();
+    return json.loads(content);
+
