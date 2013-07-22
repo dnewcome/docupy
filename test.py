@@ -1,8 +1,9 @@
-# DocuSign API Walkthrough 04 (PYTHON) - Add Signature Request to Document and Send
 import sys, httplib2, json
 import Docusign
 import Mime
 from docuconfig import username, password, integratorKey 
+
+# different lightweight container classes
 from collections import namedtuple
 from recordtype import recordtype
 

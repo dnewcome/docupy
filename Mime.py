@@ -36,23 +36,3 @@ class Part:
     def generateBoundaryEnd(self):
         return "--" + self.boundary + "--" + self.newline + self.newline
 
-def testMime():
-    part = Part()
-    fileContents = open("radios.txt", "r").read();
-    envelopeDef = '{"some":"json"}'
-
-    part.addSection(
-        { 
-            "Content-Type": "application/json",
-            "Content-Disposition": "form-data"
-        },
-        envelopeDef 
-    )
-    part.addSection(
-        { 
-            "Content-Type": "application/pdf",
-            "Content-Disposition": ['file', 'filename="radios.txt"', 'documentId=1']
-        },
-        fileContents
-    )
-    print part.write()
