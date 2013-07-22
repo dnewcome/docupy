@@ -4,42 +4,82 @@ import Docusign
 import Mime
 from docuconfig import username, password, integratorKey 
 from collections import namedtuple
+from recordtype import recordtype
 
-data = Docusign.login( username, password, integratorKey )
+loginInfo = Docusign.login( username, password, integratorKey )
 
-loginInfo = data.get('loginAccounts');
-D = loginInfo[0];
-baseUrl = D['baseUrl'];
-accountId = D['accountId'];
+baseUrl = loginInfo['baseUrl'];
+accountId = loginInfo['accountId'];
 
+"""
+RadioTab = namedtuple("RadioTab",
+    "anchorString anchorXOffset anchorYOffset anchorIgnoreIfNotPresent \
+    anchorUnits pageNumber selected value xPosition yPosition"
+)
+"""
+RadioTab = recordtype("RadioTab",
+    [
+        ("anchorString", None), 
+        ("anchorXOffset", None), 
+        ("anchorYOffset", None), 
+        ("anchorIgnoreIfNotPresent", None),
+        ("anchorUnits", None),
+        ("pageNumber", None),
+        ("selected", None),
+        ("value", None), 
+        ("xPosition", None), 
+        ("yPosition", None)
+    ]
+)
 
-def createRadioTab(y):
-     return {
-         "anchorString": None,
-         "anchorXOffset": None,
-         "anchorYOffset": None,
-         "anchorIgnoreIfNotPresent": None,
-         "anchorUnits": None,
-         "pageNumber": "1",
-         "selected": None,
-         "value": "Radio" + str(y),
-         "xPosition": "204",
-         "yPosition": str(y)
-     }
+InitialTab = recordtype("InitialTab",
+    [
+        ("anchorString", None),
+        ("anchorXOffset", None),
+        ("anchorYOffset", None),
+        ("anchorIgnoreIfNotPresent", None),
+        ("anchorUnits", None),
+        ("conditionalParentLabel", None),
+        ("conditionalParentValue", None),
+        ("documentId", None),
+        ("pageNumber", None),
+        ("recipientId", None),
+        ("templateLocked", None),
+        ("templateRequired", None),
+        ("xPosition", None),
+        ("yPosition", None),
+        ("name", None),
+        ("optional", None),
+        ("scaleValue", None),
+        ("tabLabel", None)
+    ]
+)
+
+RadioGroupTab = recordtype("RadioGroupTab",
+    [
+        ("conditionalParentLabel", None),
+        ("conditionalParentValue", None),
+        ("documentId", None),
+        ("groupName", None),
+        ("radios", None),
+        ("recipientId", None),
+        ("requireInitialOnSharedChange", False),
+        ("shared", False),
+        ("templateLocked", False),
+        ("templateRequired", False)
+    ]
+)
 
 def createAnchorRadioTab(y):
-     return {
-         "anchorString": "Radio-" + str(y),
-         "anchorXOffset": 0,
-         "anchorYOffset": 0,
-         "anchorIgnoreIfNotPresent": None,
-         "anchorUnits": None,
-         "pageNumber": "1",
-         "selected": None,
-         "value": "Radio" + str(y),
-         "xPosition": 0,
-         "yPosition": 0 
-     }
+     return RadioTab (
+         anchorString = "Radio-" + str(y),
+         anchorXOffset = 0,
+         anchorYOffset = 0,
+         pageNumber = "1",
+         value = "Radio" + str(y),
+         xPosition = 0,
+         yPosition = 0 
+     )._asdict()
 
 def createEnvelopeTemplateDefinition():
     return {
@@ -47,48 +87,17 @@ def createEnvelopeTemplateDefinition():
         "name": "Danco"
     }
 
-
-def createRadioTabs():
-    retval = []
-    for x in range(0,30):
-        retval.append(createRadioTab(x*20))
-    return retval
-
 def createAnchorRadioTabs():
     retval = []
     for x in range(0,4):
         retval.append(createAnchorRadioTab(x))
     return retval
 
-def createInitialTab(y):
-    return {
-          "anchorString": None,
-          "anchorXOffset": None,
-          "anchorYOffset": None,
-          "anchorIgnoreIfNotPresent": None,
-          "anchorUnits": None,
-          "conditionalParentLabel": "Radio Group 1",
-          "conditionalParentValue": "Radio" + str(y),
-          "documentId": "1",
-          "pageNumber": "1",
-          "recipientId": "1",
-          "templateLocked": False ,
-          "templateRequired": False,
-          "xPosition": "249",
-          "yPosition": str(y),
-          "name": "Initial Here",
-          "optional": False,
-          "scaleValue": 1,
-          "tabLabel": "Initial 5"
-        }
-
 def createAnchorInitialTab(y):
     return {
           "anchorString": "Radio-" + str(y),
           "anchorXOffset": 30,
           "anchorYOffset": 25,
-          "anchorIgnoreIfNotPresent": None,
-          "anchorUnits": None,
           "conditionalParentLabel": "Radio Group 1",
           "conditionalParentValue": "Radio" + str(y),
           "documentId": "1",
@@ -116,23 +125,18 @@ def createAnchorInitialTabs():
         retval.append(createAnchorInitialTab(x))
     return retval
 
-
 def getTabs():
     return {
-        "radioGroupTabs": [{
-        "conditionalParentLabel": None,
-        "conditionalParentValue": None,
-        "documentId": "1",
-        "groupName": "Radio Group 1",
-        #"radios": createRadioTabs(),
-        "radios": createAnchorRadioTabs(),
-        "recipientId": "1",
-        "requireInitialOnSharedChange": False,
-        "shared": False,
-        "templateLocked": False,
-        "templateRequired": False
-        }],
-        #"initialHereTabs": createInitialTabs()
+        "radioGroupTabs": [ RadioGroupTab(
+            documentId = "1",
+            groupName = "Radio Group 1",
+            radios = createAnchorRadioTabs(),
+            recipientId = "1",
+            requireInitialOnSharedChange = False,
+            shared = False,
+            templateLocked = False,
+            templateRequired = False
+        )._asdict() ],
         "initialHereTabs": createAnchorInitialTabs()
     }
 
@@ -172,19 +176,6 @@ envelopeDef = json.dumps(
 # convert the file into a string and add to the request body
 fileContents = open("radios.txt", "r").read();
 
-"""
-requestBody = "\r\n\r\n--BOUNDARY\r\n" + \
-"Content-Type: application/json\r\n" + \
-"Content-Disposition: form-data\r\n" + \
-"\r\n{0}\r\n\r\n--BOUNDARY\r\n" + \
-"Content-Type: application/pdf\r\n" + \
-"Content-Disposition: file; filename=\"radios.txt\"; documentId=1\r\n" + \
-"\r\n{1}\r\n" + \
-"--BOUNDARY--\r\n\r\n";
-
-requestBody = requestBody.format(envelopeDef, fileContents)
-print requestBody
-"""
 mime = Mime.Part("BOUNDARY")
 mime.addSection(
     { 

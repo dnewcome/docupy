@@ -26,7 +26,7 @@ def login(username, password, integratorKey):
         print("Error calling webservice, status is: %s" % status); sys.exit()
 
     # get the baseUrl and accountId from the response body
-    return json.loads(content)
+    return json.loads(content).get('loginAccounts')[0]
 
 
 def sendEnvelope( baseUrl, requestBody, username, password, integratorKey ):
