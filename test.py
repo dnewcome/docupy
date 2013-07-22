@@ -1,6 +1,7 @@
 import sys, httplib2, json
 from Docusign import Docusign
-import Mime, defs
+import defs
+from Mime import Mime
 from docuconfig import username, password, integratorKey 
 
 # different lightweight container classes
@@ -116,7 +117,7 @@ envelopeDef = json.dumps(
 # convert the file into a string and add to the request body
 fileContents = open("radios.txt", "r").read();
 
-mime = Mime.Part("BOUNDARY")
+mime = Mime("BOUNDARY")
 mime.addSection(
     { 
         "Content-Type": "application/json",

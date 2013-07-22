@@ -1,4 +1,4 @@
-class Part:
+class Mime:
     sections = []
     newline = "\r\n"
     blankline = "\r\n\r\n"
