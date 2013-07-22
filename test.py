@@ -1,6 +1,6 @@
 import sys, httplib2, json
 import Docusign
-import Mime
+import Mime, defs
 from docuconfig import username, password, integratorKey 
 
 # different lightweight container classes
@@ -12,67 +12,8 @@ loginInfo = Docusign.login( username, password, integratorKey )
 baseUrl = loginInfo['baseUrl'];
 accountId = loginInfo['accountId'];
 
-"""
-RadioTab = namedtuple("RadioTab",
-    "anchorString anchorXOffset anchorYOffset anchorIgnoreIfNotPresent \
-    anchorUnits pageNumber selected value xPosition yPosition"
-)
-"""
-RadioTab = recordtype("RadioTab",
-    [
-        ("anchorString", None), 
-        ("anchorXOffset", None), 
-        ("anchorYOffset", None), 
-        ("anchorIgnoreIfNotPresent", None),
-        ("anchorUnits", None),
-        ("pageNumber", None),
-        ("selected", None),
-        ("value", None), 
-        ("xPosition", None), 
-        ("yPosition", None)
-    ]
-)
-
-InitialTab = recordtype("InitialTab",
-    [
-        ("anchorString", None),
-        ("anchorXOffset", None),
-        ("anchorYOffset", None),
-        ("anchorIgnoreIfNotPresent", None),
-        ("anchorUnits", None),
-        ("conditionalParentLabel", None),
-        ("conditionalParentValue", None),
-        ("documentId", None),
-        ("pageNumber", None),
-        ("recipientId", None),
-        ("templateLocked", None),
-        ("templateRequired", None),
-        ("xPosition", None),
-        ("yPosition", None),
-        ("name", None),
-        ("optional", None),
-        ("scaleValue", None),
-        ("tabLabel", None)
-    ]
-)
-
-RadioGroupTab = recordtype("RadioGroupTab",
-    [
-        ("conditionalParentLabel", None),
-        ("conditionalParentValue", None),
-        ("documentId", None),
-        ("groupName", None),
-        ("radios", None),
-        ("recipientId", None),
-        ("requireInitialOnSharedChange", False),
-        ("shared", False),
-        ("templateLocked", False),
-        ("templateRequired", False)
-    ]
-)
-
 def createAnchorRadioTab(y):
-     return RadioTab (
+     return defs.RadioTab (
          anchorString = "Radio-" + str(y),
          anchorXOffset = 0,
          anchorYOffset = 0,
@@ -83,10 +24,7 @@ def createAnchorRadioTab(y):
      )._asdict()
 
 def createEnvelopeTemplateDefinition():
-    return {
-        "description": "Investment documents for Danco", 
-        "name": "Danco"
-    }
+    return defs.EnvelopeTemplateDefinition()._asdict() 
 
 def createAnchorRadioTabs():
     retval = []
@@ -95,24 +33,24 @@ def createAnchorRadioTabs():
     return retval
 
 def createAnchorInitialTab(y):
-    return {
-          "anchorString": "Radio-" + str(y),
-          "anchorXOffset": 30,
-          "anchorYOffset": 25,
-          "conditionalParentLabel": "Radio Group 1",
-          "conditionalParentValue": "Radio" + str(y),
-          "documentId": "1",
-          "pageNumber": "1",
-          "recipientId": "1",
-          "templateLocked": False ,
-          "templateRequired": False,
-          "xPosition": 0,
-          "yPosition": 0,
-          "name": "Initial Here",
-          "optional": False,
-          "scaleValue": 1,
-          "tabLabel": "Initial 5"
-        }
+    return defs.InitialTab (
+          anchorString = 'Radio-' + str(y),
+          anchorXOffset = 30,
+          anchorYOffset = 25,
+          conditionalParentLabel = 'Radio Group 1',
+          conditionalParentValue = 'Radio' + str(y),
+          documentId = 1,
+          pageNumber = 1,
+          recipientId = 1,
+          templateLocked = False,
+          templateRequired = False,
+          xPosition = 0,
+          yPosition = 0,
+          name = 'Initial Here',
+          optional = False,
+          scaleValue = 1,
+          tabLabel = 'Initial 5'
+        )._asdict()
 
 def createInitialTabs():
     retval = []
@@ -128,7 +66,7 @@ def createAnchorInitialTabs():
 
 def getTabs():
     return {
-        "radioGroupTabs": [ RadioGroupTab(
+        "radioGroupTabs": [ defs.RadioGroupTab(
             documentId = "1",
             groupName = "Radio Group 1",
             radios = createAnchorRadioTabs(),
