@@ -1,54 +1,58 @@
 import httplib2, json
 
-def authString( username, password, integratorKey ):
-    return json.dumps({
-    'Username': username,
-    'Password': password,
-    'IntegratorKey': integratorKey
-})
+class Docusign:
 
-def login(username, password, integratorKey):
-    authenticateStr = authString( username, password, integratorKey )
+    def __init__(self, username, password, integratorKey):
+        self.authString = self.authString( username, password, integratorKey )
 
-    url = 'https://demo.docusign.net/restapi/v2/login_information'
+    def authString(self, username, password, integratorKey ):
+        return json.dumps({
+        'Username': username,
+        'Password': password,
+        'IntegratorKey': integratorKey
+    })
 
-    headers = {
-        'X-DocuSign-Authentication': authenticateStr,
-        'Accept': 'application/json'
-    }
+    def login(self):
+        authenticateStr = self.authString
 
-    http = httplib2.Http()
-    response, content = http.request(url, 'GET', headers=headers)
+        url = 'https://demo.docusign.net/restapi/v2/login_information'
 
-    status = response.get('status')
+        headers = {
+            'X-DocuSign-Authentication': authenticateStr,
+            'Accept': 'application/json'
+        }
 
-    if (status != '200'):
-        print("Error calling webservice, status is: %s" % status); sys.exit()
+        http = httplib2.Http()
+        response, content = http.request(url, 'GET', headers=headers)
 
-    # get the baseUrl and accountId from the response body
-    return json.loads(content).get('loginAccounts')[0]
+        status = response.get('status')
 
+        if (status != '200'):
+            print("Error calling webservice, status is: %s" % status); sys.exit()
 
-def sendEnvelope( baseUrl, requestBody, username, password, integratorKey ):
-    authenticateStr = authString( username, password, integratorKey )
-    url = baseUrl + "/envelopes";
-    #url = baseUrl + "/templates";
-    headers = {'X-DocuSign-Authentication': authenticateStr, 'Content-Type': 'multipart/form-data; boundary=BOUNDARY', 'Accept': 'application/json'};
-    http = httplib2.Http();
-    response, content = http.request(url, 'POST', headers=headers, body=requestBody);
-    status = response.get('status');
-    if (status != '201'):
-        print("Error calling webservice, status is: %s\nError description - %s" % (status, content)); sys.exit();
-    return json.loads(content);
+        # get the baseUrl and accountId from the response body
+        return json.loads(content).get('loginAccounts')[0]
 
-def sendTemplate( baseUrl, requestBody, username, password, integratorKey ):
-    authenticateStr = authString( username, password, integratorKey )
-    url = baseUrl + "/templates";
-    headers = {'X-DocuSign-Authentication': authenticateStr, 'Content-Type': 'multipart/form-data; boundary=BOUNDARY', 'Accept': 'application/json'};
-    http = httplib2.Http();
-    response, content = http.request(url, 'POST', headers=headers, body=requestBody);
-    status = response.get('status');
-    if (status != '201'):
-        print("Error calling webservice, status is: %s\nError description - %s" % (status, content)); sys.exit();
-    return json.loads(content);
+    def sendEnvelope(self, baseUrl, requestBody ):
+        authenticateStr = self.authString
+        url = baseUrl + "/envelopes";
+        #url = baseUrl + "/templates";
+        headers = {'X-DocuSign-Authentication': authenticateStr, 'Content-Type': 'multipart/form-data; boundary=BOUNDARY', 'Accept': 'application/json'};
+        http = httplib2.Http();
+        response, content = http.request(url, 'POST', headers=headers, body=requestBody);
+        status = response.get('status');
+        if (status != '201'):
+            print("Error calling webservice, status is: %s\nError description - %s" % (status, content)); sys.exit();
+        return json.loads(content);
+
+    def sendTemplate(self, baseUrl, requestBody, username, password, integratorKey ):
+        authenticateStr = self.authString
+        url = baseUrl + "/templates";
+        headers = {'X-DocuSign-Authentication': authenticateStr, 'Content-Type': 'multipart/form-data; boundary=BOUNDARY', 'Accept': 'application/json'};
+        http = httplib2.Http();
+        response, content = http.request(url, 'POST', headers=headers, body=requestBody);
+        status = response.get('status');
+        if (status != '201'):
+            print("Error calling webservice, status is: %s\nError description - %s" % (status, content)); sys.exit();
+        return json.loads(content);
 

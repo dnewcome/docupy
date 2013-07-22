@@ -1,5 +1,5 @@
 import sys, httplib2, json
-import Docusign
+from Docusign import Docusign
 import Mime, defs
 from docuconfig import username, password, integratorKey 
 
@@ -7,7 +7,8 @@ from docuconfig import username, password, integratorKey
 from collections import namedtuple
 from recordtype import recordtype
 
-loginInfo = Docusign.login( username, password, integratorKey )
+docusign = Docusign(username, password, integratorKey)
+loginInfo = docusign.login( )
 
 baseUrl = loginInfo['baseUrl'];
 accountId = loginInfo['accountId'];
@@ -133,7 +134,7 @@ mime.addSection(
 print mime.write()
 
 #envId = Docusign.sendEnvelope( baseUrl, requestBody, username, password, integratorKey ).get('envelopeId')
-envId = Docusign.sendTemplate( baseUrl, mime.write(), username, password, integratorKey ).get('envelopeId')
+envId = docusign.sendTemplate( baseUrl, mime.write(), username, password, integratorKey ).get('envelopeId')
 
 #--- display results
 print ("Document sent! EnvelopeId is: %s\n" % envId);
