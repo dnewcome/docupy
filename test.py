@@ -1,11 +1,9 @@
 # DocuSign API Walkthrough 04 (PYTHON) - Add Signature Request to Document and Send
 import sys, httplib2, json
 import Docusign
-
-# Enter your info:
-username = "dnewcome@circleup.com";
-password = "9a2UpOoBtZC";
-integratorKey = "CIRC-701b9303-d868-488b-9db0-d561dd5eb9c0";
+import Mime
+from docuconfig import username, password, integratorKey 
+from collections import namedtuple
 
 data = Docusign.login( username, password, integratorKey )
 
@@ -13,6 +11,7 @@ loginInfo = data.get('loginAccounts');
 D = loginInfo[0];
 baseUrl = D['baseUrl'];
 accountId = D['accountId'];
+
 
 def createRadioTab(y):
      return {
@@ -168,27 +167,43 @@ envelopeDef = json.dumps(
         "status":"sent"
     })
 
-
-print envelopeDef
-
+#"Content-Type: text/plain\r\n" + \
 
 # convert the file into a string and add to the request body
 fileContents = open("radios.txt", "r").read();
 
+"""
 requestBody = "\r\n\r\n--BOUNDARY\r\n" + \
 "Content-Type: application/json\r\n" + \
 "Content-Disposition: form-data\r\n" + \
-"\r\n" + \
-envelopeDef + "\r\n\r\n--BOUNDARY\r\n" + \
-"Content-Type: text/plain\r\n" + \
+"\r\n{0}\r\n\r\n--BOUNDARY\r\n" + \
+"Content-Type: application/pdf\r\n" + \
 "Content-Disposition: file; filename=\"radios.txt\"; documentId=1\r\n" + \
-"\r\n" + \
-fileContents + "\r\n" + \
+"\r\n{1}\r\n" + \
 "--BOUNDARY--\r\n\r\n";
 
+requestBody = requestBody.format(envelopeDef, fileContents)
+print requestBody
+"""
+mime = Mime.Part("BOUNDARY")
+mime.addSection(
+    { 
+        "Content-Type": "application/json",
+        "Content-Disposition": "form-data"
+    },
+    envelopeDef 
+)
+mime.addSection(
+    { 
+        "Content-Type": "application/pdf",
+        "Content-Disposition": ['file', 'filename="radios.txt"', 'documentId=1']
+    },
+    fileContents
+)
+print mime.write()
 
-# envId = Docusign.sendEnvelope( baseUrl, requestBody, username, password, integratorKey ).get('envelopeId')
-envId = Docusign.sendTemplate( baseUrl, requestBody, username, password, integratorKey ).get('envelopeId')
+#envId = Docusign.sendEnvelope( baseUrl, requestBody, username, password, integratorKey ).get('envelopeId')
+envId = Docusign.sendTemplate( baseUrl, mime.write(), username, password, integratorKey ).get('envelopeId')
 
 #--- display results
 print ("Document sent! EnvelopeId is: %s\n" % envId);
