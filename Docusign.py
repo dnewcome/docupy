@@ -15,6 +15,7 @@ class Docusign:
     def login(self):
         authenticateStr = self.authString
 
+        # API entry point is a well-known url
         url = 'https://demo.docusign.net/restapi/v2/login_information'
 
         headers = {
@@ -31,11 +32,13 @@ class Docusign:
             print("Error calling webservice, status is: %s" % status); sys.exit()
 
         # get the baseUrl and accountId from the response body
-        return json.loads(content).get('loginAccounts')[0]
+        loginInfo = json.loads(content).get('loginAccounts')[0]
+        self.baseUrl = loginInfo['baseUrl']
+        return loginInfo
 
-    def sendEnvelope(self, baseUrl, requestBody ):
+    def sendEnvelope(self, requestBody ):
         authenticateStr = self.authString
-        url = baseUrl + "/envelopes";
+        url = self.baseUrl + "/envelopes";
         #url = baseUrl + "/templates";
         headers = {'X-DocuSign-Authentication': authenticateStr, 'Content-Type': 'multipart/form-data; boundary=BOUNDARY', 'Accept': 'application/json'};
         http = httplib2.Http();
@@ -45,9 +48,9 @@ class Docusign:
             print("Error calling webservice, status is: %s\nError description - %s" % (status, content)); sys.exit();
         return json.loads(content);
 
-    def sendTemplate(self, baseUrl, requestBody, username, password, integratorKey ):
+    def sendTemplate(self, requestBody):
         authenticateStr = self.authString
-        url = baseUrl + "/templates";
+        url = self.baseUrl + "/templates";
         headers = {'X-DocuSign-Authentication': authenticateStr, 'Content-Type': 'multipart/form-data; boundary=BOUNDARY', 'Accept': 'application/json'};
         http = httplib2.Http();
         response, content = http.request(url, 'POST', headers=headers, body=requestBody);

@@ -1,17 +1,15 @@
-import sys, httplib2, json
-from Docusign import Docusign
-import defs
-from Mime import Mime
-from docuconfig import username, password, integratorKey 
+import sys, httplib2, json, unittest
 
-# different lightweight container classes
-from collections import namedtuple
-from recordtype import recordtype
+from docuconfig import username, password, integratorKey 
+from Docusign import Docusign
+from Mime import Mime
+import defs
+
+
 
 docusign = Docusign(username, password, integratorKey)
 loginInfo = docusign.login( )
 
-baseUrl = loginInfo['baseUrl'];
 accountId = loginInfo['accountId'];
 
 def createAnchorRadioTab(y):
@@ -82,7 +80,7 @@ def getTabs():
     }
 
 #--- display results
-print ("baseUrl = %s\naccountId = %s" % (baseUrl, accountId));
+print ("accountId = %s" % accountId);
 
 
 #construct the body of the request in JSON format
@@ -112,30 +110,63 @@ envelopeDef = json.dumps(
         "status":"sent"
     })
 
-#"Content-Type: text/plain\r\n" + \
 
-# convert the file into a string and add to the request body
-fileContents = open("radios.txt", "r").read();
+class TestSendTemplate(unittest.TestCase):
 
-mime = Mime("BOUNDARY")
-mime.addSection(
-    { 
-        "Content-Type": "application/json",
-        "Content-Disposition": "form-data"
-    },
-    envelopeDef 
-)
-mime.addSection(
-    { 
-        "Content-Type": "application/pdf",
-        "Content-Disposition": ['file', 'filename="radios.txt"', 'documentId=1']
-    },
-    fileContents
-)
-print mime.write()
+    def test_send_template(self):
+        # convert the file into a string and add to the request body
+        fileContents = open("radios.txt", "r").read();
 
-#envId = Docusign.sendEnvelope( baseUrl, requestBody, username, password, integratorKey ).get('envelopeId')
-envId = docusign.sendTemplate( baseUrl, mime.write(), username, password, integratorKey ).get('envelopeId')
+        mime = Mime("BOUNDARY")
+        mime.addSection(
+            { 
+                "Content-Type": "application/json",
+                "Content-Disposition": "form-data"
+            },
+            envelopeDef 
+        )
+        mime.addSection(
+            { 
+                "Content-Type": "application/txt",
+                "Content-Disposition": ['file', 'filename="radios.txt"', 'documentId=1']
+            },
+            fileContents
+        )
+        print mime.write()
 
-#--- display results
-print ("Document sent! EnvelopeId is: %s\n" % envId);
+        envId = docusign.sendTemplate(mime.write()).get('envelopeId')
+
+        #--- display results
+        print ("Document sent! EnvelopeId is: %s\n" % envId);
+        self.assertTrue(True)
+
+    def test_send_templatePdf(self):
+        # convert the file into a string and add to the request body
+        fileContents = open("radios.pdf", "r").read();
+
+        mime = Mime("BOUNDARY")
+        mime.addSection(
+            { 
+                "Content-Type": "application/json",
+                "Content-Disposition": "form-data"
+            },
+            envelopeDef 
+        )
+        mime.addSection(
+            { 
+                "Content-Type": "application/pdf",
+                "Content-Transfer-Encoding": "binary",
+                "Content-Disposition": ['file', 'filename="radios.pdf"', 'documentId=1']
+            },
+            fileContents
+        )
+        print mime.write()
+
+        envId = docusign.sendTemplate(mime.write()).get('envelopeId')
+
+        #--- display results
+        print ("Document sent! EnvelopeId is: %s\n" % envId);
+        self.assertTrue(True)
+
+if __name__ == '__main__':
+    unittest.main()
