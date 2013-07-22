@@ -1,4 +1,4 @@
-import httplib2, json
+import requests, json, sys
 
 class Docusign:
 
@@ -23,16 +23,17 @@ class Docusign:
             'Accept': 'application/json'
         }
 
+        '''
         http = httplib2.Http()
         response, content = http.request(url, 'GET', headers=headers)
+        '''
+        response = requests.get(url, headers=headers)
 
-        status = response.get('status')
-
-        if (status != '200'):
-            print("Error calling webservice, status is: %s" % status); sys.exit()
+        if (response.status_code != 200):
+            print("Error logging in, status is: %s" % response.status_code); sys.exit()
 
         # get the baseUrl and accountId from the response body
-        loginInfo = json.loads(content).get('loginAccounts')[0]
+        loginInfo = response.json().get('loginAccounts')[0]
         self.baseUrl = loginInfo['baseUrl']
         return loginInfo
 
@@ -41,21 +42,27 @@ class Docusign:
         url = self.baseUrl + "/envelopes";
         #url = baseUrl + "/templates";
         headers = {'X-DocuSign-Authentication': authenticateStr, 'Content-Type': 'multipart/form-data; boundary=BOUNDARY', 'Accept': 'application/json'};
+        '''
         http = httplib2.Http();
         response, content = http.request(url, 'POST', headers=headers, body=requestBody);
-        status = response.get('status');
-        if (status != '201'):
-            print("Error calling webservice, status is: %s\nError description - %s" % (status, content)); sys.exit();
-        return json.loads(content);
+        '''
+        response = requests.post(url, data=requestBody, headers=headers)
+
+        if (response.status_code != 201):
+            print("Error sending envelope, status is: %s\nError description - %s" % (response.status_code, response)); sys.exit();
+        return response.json();
 
     def sendTemplate(self, requestBody):
         authenticateStr = self.authString
         url = self.baseUrl + "/templates";
         headers = {'X-DocuSign-Authentication': authenticateStr, 'Content-Type': 'multipart/form-data; boundary=BOUNDARY', 'Accept': 'application/json'};
+        '''
         http = httplib2.Http();
         response, content = http.request(url, 'POST', headers=headers, body=requestBody);
-        status = response.get('status');
-        if (status != '201'):
-            print("Error calling webservice, status is: %s\nError description - %s" % (status, content)); sys.exit();
-        return json.loads(content);
+        '''
+        response = requests.post(url, data=requestBody, headers=headers)
+
+        if (response.status_code != 201):
+            print("Error sending template, status is: %s\nError description - %s" % (response.status_code, response)); sys.exit();
+        return response.json();
 

@@ -1,11 +1,9 @@
-import sys, httplib2, json, unittest
+import sys, requests, json, unittest
 
 from docuconfig import username, password, integratorKey 
 from Docusign import Docusign
 from Mime import Mime
 import defs
-
-
 
 docusign = Docusign(username, password, integratorKey)
 loginInfo = docusign.login( )
