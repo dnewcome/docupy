@@ -23,10 +23,6 @@ class Docusign:
             'Accept': 'application/json'
         }
 
-        '''
-        http = httplib2.Http()
-        response, content = http.request(url, 'GET', headers=headers)
-        '''
         response = requests.get(url, headers=headers)
 
         if (response.status_code != 200):
@@ -42,10 +38,6 @@ class Docusign:
         url = self.baseUrl + "/envelopes";
         #url = baseUrl + "/templates";
         headers = {'X-DocuSign-Authentication': authenticateStr, 'Content-Type': 'multipart/form-data; boundary=BOUNDARY', 'Accept': 'application/json'};
-        '''
-        http = httplib2.Http();
-        response, content = http.request(url, 'POST', headers=headers, body=requestBody);
-        '''
         response = requests.post(url, data=requestBody, headers=headers)
 
         if (response.status_code != 201):
@@ -56,10 +48,6 @@ class Docusign:
         authenticateStr = self.authString
         url = self.baseUrl + "/templates";
         headers = {'X-DocuSign-Authentication': authenticateStr, 'Content-Type': 'multipart/form-data; boundary=BOUNDARY', 'Accept': 'application/json'};
-        '''
-        http = httplib2.Http();
-        response, content = http.request(url, 'POST', headers=headers, body=requestBody);
-        '''
         response = requests.post(url, data=requestBody, headers=headers)
 
         if (response.status_code != 201):
