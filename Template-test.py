@@ -86,25 +86,46 @@ print ("accountId = %s" % accountId);
 
 
 #construct the body of the request in JSON format
+envelopeDef = json.dumps( defs.Template(
+    envelopeTemplateDefinition = createEnvelopeTemplateDefinition(),
+    emailBlurb = "This comes from Python",
+    emailSubject = "API Call for adding signature request to document and sending",
+    documents = [ defs.Document( 
+        documentId = 1, 
+        name = "test.txt" )
+    ],
+    recipients = {
+        "signers": [ defs.Signer(
+            email = username, 
+            name = "name", 
+            recipientId = 1, 
+            tabs = getTabs()
+        ) ]
+    }
+    #status = "sent"
+), cls=JSONRestEncoder )
+"""
 envelopeDef = json.dumps(
     {
         "envelopeTemplateDefinition": createEnvelopeTemplateDefinition(),
         "emailBlurb":"This comes from Python",
         "emailSubject":"API Call for adding signature request to document and sending",
-        "documents":[{
-            "documentId":"1",
-            "name":"test.txt"
-        }],
+        "documents":[ defs.Document( 
+            documentId = 1, 
+            name = "test.txt" )
+        ],
         "recipients":{
-            "signers":[{
-                "email": username,
-                "name":"Name",
-                "recipientId":"1",
-                "tabs": getTabs()
-            }]
+            "signers": [ defs.Signer(
+                email = username, 
+                name = "name", 
+                recipientId = 1, 
+                tabs = getTabs()
+            ) ]
+
         },
         "status":"sent"
     }, cls=JSONRestEncoder)
+"""
 
 
 class TestSendTemplate(unittest.TestCase):

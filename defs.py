@@ -7,6 +7,58 @@ def json(self):
 
 recordtype.json = json
 
+
+"""
+Incomplete definition for Document
+TODO: find rest of fields from docs
+"""
+Document = recordtype("Document",
+    [
+        #"documentId":"1",
+        ("documentId", None),
+        ("name", None)
+    ]
+)
+
+"""
+Incomplete definition for Signer 
+TODO: find rest of fields from docs
+"""
+Signer = recordtype("Signer",
+    [
+        ("email", None),
+        ("name", None),
+        ("recipientId", None),
+        ("tabs", None) 
+    ]
+)
+
+Template = recordtype('Template', 
+    [
+        ("accessiblity", None),
+        ("allowMarkup", None),
+        ("allowReassign", None),
+        ("allowRecipientRecursion", None),
+        ("asynchronous", None),
+        ("authoritativeCopy", None),
+        ("autoNavigation", None),
+        ("brandId", None),
+        ("emailBlurb", None),
+        ("emailSubject", None),
+        ("enableWetSign", None),
+        ("enforceSignerVisibility", None),
+        ("envelopeIdStamp", None),
+        ("eventNotification", None),
+        ("messageLock", None),
+        ("signingLocation", None),
+        ("customFields", None),
+        ("templateId", None),
+        ("documents", None),
+        ("recipients", None),
+        ("envelopeTemplateDefinition", None)
+    ]
+)
+
 EnvelopeTemplateDefinition = recordtype("EnvelopeTemplateDefinition",
     [
         # these fields are all optional
