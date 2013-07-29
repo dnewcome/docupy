@@ -1,4 +1,11 @@
 from recordtype import recordtype
+import json
+
+def json(self):
+    """Return a json representation of the object"""
+    return json.dumps(self.dict(), cls=JSONRestEncoder) 
+
+recordtype.json = json
 
 EnvelopeTemplateDefinition = recordtype("RadioGroupTab",
     [
@@ -25,15 +32,38 @@ RadioGroupTab = recordtype("RadioGroupTab",
 RadioTab = recordtype("RadioTab",
     [
         ("anchorString", None), 
-        ("anchorXOffset", None), 
-        ("anchorYOffset", None), 
+        ("anchorXOffset", 0), 
+        ("anchorYOffset", 0), 
         ("anchorIgnoreIfNotPresent", None),
         ("anchorUnits", None),
         ("pageNumber", None),
         ("selected", None),
         ("value", None), 
-        ("xPosition", None), 
-        ("yPosition", None)
+        ("xPosition", 0), 
+        ("yPosition", 0)
+    ]
+)
+
+InitialTab = recordtype("InitialTab",
+    [
+        ("anchorString", None),
+        ("anchorXOffset", 0),
+        ("anchorYOffset", 0),
+        ("anchorIgnoreIfNotPresent", None),
+        ("anchorUnits", None),
+        ("conditionalParentLabel", None),
+        ("conditionalParentValue", None),
+        ("documentId", None),
+        ("pageNumber", None),
+        ("recipientId", None),
+        ("templateLocked", None),
+        ("templateRequired", None),
+        ("xPosition", 0),
+        ("yPosition", 0),
+        ("name", None),
+        ("optional", None),
+        ("scaleValue", None),
+        ("tabLabel", None)
     ]
 )
 
@@ -44,26 +74,3 @@ RadioTab = namedtuple("RadioTab",
     anchorUnits pageNumber selected value xPosition yPosition"
 )
 """
-
-InitialTab = recordtype("InitialTab",
-    [
-        ("anchorString", None),
-        ("anchorXOffset", None),
-        ("anchorYOffset", None),
-        ("anchorIgnoreIfNotPresent", None),
-        ("anchorUnits", None),
-        ("conditionalParentLabel", None),
-        ("conditionalParentValue", None),
-        ("documentId", None),
-        ("pageNumber", None),
-        ("recipientId", None),
-        ("templateLocked", None),
-        ("templateRequired", None),
-        ("xPosition", None),
-        ("yPosition", None),
-        ("name", None),
-        ("optional", None),
-        ("scaleValue", None),
-        ("tabLabel", None)
-    ]
-)

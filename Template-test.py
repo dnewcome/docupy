@@ -4,11 +4,21 @@ from docuconfig import username, password, integratorKey
 from Docusign import Docusign
 from Mime import Mime
 import defs
+from recordtype import recordtype
 
 docusign = Docusign(username, password, integratorKey)
 loginInfo = docusign.login( )
 
 accountId = loginInfo['accountId'];
+
+class JSONRestEncoder(json.JSONEncoder):
+    """JSON encoder that can handle RestObjects"""
+    def default(self, obj):
+        try:
+            return obj._asdict()
+        except:
+            return json.JSONEncoder.default(self, obj)
+
 
 def createAnchorRadioTab(y):
      return defs.RadioTab (
@@ -19,14 +29,14 @@ def createAnchorRadioTab(y):
          value = "Radio" + str(y),
          xPosition = 0,
          yPosition = 0 
-     )._asdict()
+     )
 
 def createEnvelopeTemplateDefinition():
-    return defs.EnvelopeTemplateDefinition()._asdict() 
+    return defs.EnvelopeTemplateDefinition() 
 
 def createAnchorRadioTabs():
     retval = []
-    for x in range(0,4):
+    for x in range(0,1):
         retval.append(createAnchorRadioTab(x))
     return retval
 
@@ -48,7 +58,7 @@ def createAnchorInitialTab(y):
           optional = False,
           scaleValue = 1,
           tabLabel = 'Initial 5'
-        )._asdict()
+        )
 
 def createInitialTabs():
     retval = []
@@ -58,7 +68,7 @@ def createInitialTabs():
 
 def createAnchorInitialTabs():
     retval = []
-    for x in range(0,4):
+    for x in range(0,1):
         retval.append(createAnchorInitialTab(x))
     return retval
 
@@ -73,7 +83,7 @@ def getTabs():
             shared = False,
             templateLocked = False,
             templateRequired = False
-        )._asdict() ],
+        ) ],
         "initialHereTabs": createAnchorInitialTabs()
     }
 
@@ -106,7 +116,7 @@ envelopeDef = json.dumps(
             }]
         },
         "status":"sent"
-    })
+    }, cls=JSONRestEncoder)
 
 
 class TestSendTemplate(unittest.TestCase):
