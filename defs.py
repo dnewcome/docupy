@@ -7,10 +7,18 @@ def json(self):
 
 recordtype.json = json
 
-EnvelopeTemplateDefinition = recordtype("RadioGroupTab",
+EnvelopeTemplateDefinition = recordtype("EnvelopeTemplateDefinition",
     [
-        ("description", "Investment documents for Danco"), 
-        ("name", "Danco")
+        # these fields are all optional
+        ("description", None), 
+        ("name", None),
+
+        #docusign will fail if null pagecount is sent,
+        #field must be omitted completely if null
+        #("pageCount", None)
+
+        ("password", None),
+        ("shared", None)
     ]
 )
 
@@ -44,28 +52,29 @@ RadioTab = recordtype("RadioTab",
     ]
 )
 
-InitialTab = recordtype("InitialTab",
-    [
-        ("anchorString", None),
-        ("anchorXOffset", 0),
-        ("anchorYOffset", 0),
-        ("anchorIgnoreIfNotPresent", None),
-        ("anchorUnits", None),
-        ("conditionalParentLabel", None),
-        ("conditionalParentValue", None),
-        ("documentId", None),
-        ("pageNumber", None),
-        ("recipientId", None),
-        ("templateLocked", None),
-        ("templateRequired", None),
-        ("xPosition", 0),
-        ("yPosition", 0),
-        ("name", None),
-        ("optional", None),
-        ("scaleValue", None),
-        ("tabLabel", None)
-    ]
-)
+signatureFields = [
+    ("anchorString", None),
+    ("anchorXOffset", 0),
+    ("anchorYOffset", 0),
+    ("anchorIgnoreIfNotPresent", None),
+    ("anchorUnits", None),
+    ("conditionalParentLabel", None),
+    ("conditionalParentValue", None),
+    ("documentId", None),
+    ("pageNumber", None),
+    ("recipientId", None),
+    ("templateLocked", None),
+    ("templateRequired", None),
+    ("xPosition", 0),
+    ("yPosition", 0),
+    ("name", None),
+    ("optional", None),
+    ("scaleValue", None),
+    ("tabLabel", None)
+]
+
+InitialTab = recordtype("InitialTab", signatureFields)
+SignHereTab = recordtype("SignHereTab", signatureFields)
 
 """
 # implementation using namedtuple

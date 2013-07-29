@@ -23,12 +23,8 @@ class JSONRestEncoder(json.JSONEncoder):
 def createAnchorRadioTab(y):
      return defs.RadioTab (
          anchorString = "Radio-" + str(y),
-         anchorXOffset = 0,
-         anchorYOffset = 0,
          pageNumber = "1",
-         value = "Radio" + str(y),
-         xPosition = 0,
-         yPosition = 0 
+         value = "Radio" + str(y)
      )
 
 def createEnvelopeTemplateDefinition():
@@ -52,11 +48,9 @@ def createAnchorInitialTab(y):
           recipientId = 1,
           templateLocked = False,
           templateRequired = False,
-          xPosition = 0,
-          yPosition = 0,
           name = 'Initial Here',
           optional = False,
-          scaleValue = 1,
+          scaleValue = 0.5,
           tabLabel = 'Initial 5'
         )
 
@@ -106,13 +100,7 @@ envelopeDef = json.dumps(
                 "email": username,
                 "name":"Name",
                 "recipientId":"1",
-                "tabs": getTabs(),
-                "signHereTabs":[{
-                    "xPosition":"100",
-                    "yPosition":"100",
-                    "documentId":"1",
-                    "pageNumber":"1"
-                }]
+                "tabs": getTabs()
             }]
         },
         "status":"sent"
