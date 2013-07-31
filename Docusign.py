@@ -36,8 +36,10 @@ class Docusign:
     def sendEnvelope(self, requestBody ):
         authenticateStr = self.authString
         url = self.baseUrl + "/envelopes";
-        #url = baseUrl + "/templates";
-        headers = {'X-DocuSign-Authentication': authenticateStr, 'Content-Type': 'multipart/form-data; boundary=BOUNDARY', 'Accept': 'application/json'};
+        headers = {
+            'X-DocuSign-Authentication': authenticateStr, 
+            'Content-Type': 'multipart/form-data; boundary=BOUNDARY', 'Accept': 'application/json'
+        };
         response = requests.post(url, data=requestBody, headers=headers)
 
         if (response.status_code != 201):

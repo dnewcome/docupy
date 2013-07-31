@@ -1,6 +1,9 @@
 from recordtype import recordtype
 import json
 
+"""
+patch recordtype with json() method
+"""
 def json(self):
     """Return a json representation of the object"""
     return json.dumps(self.dict(), cls=JSONRestEncoder) 

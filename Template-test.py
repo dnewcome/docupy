@@ -6,11 +6,17 @@ from Mime import Mime
 import defs
 from recordtype import recordtype
 
+# TRACE = False 
+TRACE = True 
+
 docusign = Docusign(username, password, integratorKey)
 loginInfo = docusign.login( )
 
 accountId = loginInfo['accountId'];
 
+"""
+TODO: move encoder
+"""
 class JSONRestEncoder(json.JSONEncoder):
     """JSON encoder that can handle RestObjects"""
     def default(self, obj):
@@ -19,6 +25,9 @@ class JSONRestEncoder(json.JSONEncoder):
         except:
             return json.JSONEncoder.default(self, obj)
 
+def trace(msg):
+    if TRACE:
+        print msg
 
 def createAnchorRadioTab(y):
      return defs.RadioTab (
@@ -82,7 +91,7 @@ def getTabs():
     }
 
 #--- display results
-print ("accountId = %s" % accountId);
+trace("accountId = %s" % accountId);
 
 #construct the body of the request in JSON format
 envelopeDef = json.dumps( defs.Template(
@@ -114,7 +123,7 @@ class TestSendTemplate(unittest.TestCase):
         # convert the file into a string and add to the request body
         fileContents = open(filename, "r").read();
 
-        mime = Mime("BOUNDARY")
+        mime = Mime()
         mime.addSection(
             { 
                 "Content-Type": "application/json",
@@ -129,12 +138,12 @@ class TestSendTemplate(unittest.TestCase):
             },
             fileContents
         )
-        print mime.write()
+        trace(mime.write())
 
         envId = docusign.sendTemplate(mime.write()).get('envelopeId')
 
         #--- display results
-        print ("Document sent! EnvelopeId is: %s\n" % envId);
+        trace("Document sent! EnvelopeId is: %s\n" % envId);
         self.assertTrue(True)
 
 if __name__ == '__main__':

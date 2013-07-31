@@ -2,12 +2,12 @@ class Mime:
     sections = []
     newline = "\r\n"
     blankline = "\r\n\r\n"
+    boundary = "BOUNDARY"
     
-    def __init__(self, boundary):
-        self.boundary = boundary
+    def __init__(self):
+        pass
 
     def write(self):
-        #return self.newline.join(self.sections) + self.generateBoundaryEnd()
         return "".join(self.sections) + self.generateBoundaryEnd()
 
     def addSection(self, headers, body):
