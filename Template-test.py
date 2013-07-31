@@ -1,6 +1,6 @@
 import sys, requests, json, unittest
 
-from docuconfig import username, password, integratorKey 
+from config import username, password, integratorKey 
 from Docusign import Docusign
 from Mime import Mime
 import defs
