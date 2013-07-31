@@ -84,7 +84,6 @@ def getTabs():
 #--- display results
 print ("accountId = %s" % accountId);
 
-
 #construct the body of the request in JSON format
 envelopeDef = json.dumps( defs.Template(
     envelopeTemplateDefinition = createEnvelopeTemplateDefinition(),
@@ -104,35 +103,16 @@ envelopeDef = json.dumps( defs.Template(
     }
     #status = "sent"
 ), cls=JSONRestEncoder )
-"""
-envelopeDef = json.dumps(
-    {
-        "envelopeTemplateDefinition": createEnvelopeTemplateDefinition(),
-        "emailBlurb":"This comes from Python",
-        "emailSubject":"API Call for adding signature request to document and sending",
-        "documents":[ defs.Document( 
-            documentId = 1, 
-            name = "test.txt" )
-        ],
-        "recipients":{
-            "signers": [ defs.Signer(
-                email = username, 
-                name = "name", 
-                recipientId = 1, 
-                tabs = getTabs()
-            ) ]
-
-        },
-        "status":"sent"
-    }, cls=JSONRestEncoder)
-"""
-
 
 class TestSendTemplate(unittest.TestCase):
 
     def test_send_template(self):
+        self.send_template("radios.txt", "plain/txt")
+        self.send_template("radios.pdf", "application/pdf")
+    
+    def send_template(self, filename, content_type):
         # convert the file into a string and add to the request body
-        fileContents = open("radios.txt", "r").read();
+        fileContents = open(filename, "r").read();
 
         mime = Mime("BOUNDARY")
         mime.addSection(
@@ -144,36 +124,8 @@ class TestSendTemplate(unittest.TestCase):
         )
         mime.addSection(
             { 
-                "Content-Type": "application/txt",
-                "Content-Disposition": ['file', 'filename="radios.txt"', 'documentId=1']
-            },
-            fileContents
-        )
-        print mime.write()
-
-        envId = docusign.sendTemplate(mime.write()).get('envelopeId')
-
-        #--- display results
-        print ("Document sent! EnvelopeId is: %s\n" % envId);
-        self.assertTrue(True)
-
-    def test_send_templatePdf(self):
-        # convert the file into a string and add to the request body
-        fileContents = open("radios.pdf", "r").read();
-
-        mime = Mime("BOUNDARY")
-        mime.addSection(
-            { 
-                "Content-Type": "application/json",
-                "Content-Disposition": "form-data"
-            },
-            envelopeDef 
-        )
-        mime.addSection(
-            { 
-                "Content-Type": "application/pdf",
-                "Content-Transfer-Encoding": "binary",
-                "Content-Disposition": ['file', 'filename="radios.pdf"', 'documentId=1']
+                "Content-Type": content_type,
+                "Content-Disposition": ['file', 'filename="' + filename + '"', 'documentId=1']
             },
             fileContents
         )
