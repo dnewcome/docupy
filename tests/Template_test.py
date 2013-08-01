@@ -12,7 +12,6 @@ TRACE = True
 docusign = Docusign(username, password, integratorKey)
 loginInfo = docusign.login( )
 
-accountId = loginInfo['accountId'];
 
 """
 TODO: move encoder
@@ -39,12 +38,6 @@ def createAnchorRadioTab(y):
 def createEnvelopeTemplateDefinition():
     return defs.EnvelopeTemplateDefinition() 
 
-def createAnchorRadioTabs():
-    retval = []
-    for x in range(0,1):
-        retval.append(createAnchorRadioTab(x))
-    return retval
-
 def createAnchorInitialTab(y):
     return defs.InitialTab (
           anchorString = 'Radio-' + str(y),
@@ -63,35 +56,20 @@ def createAnchorInitialTab(y):
           tabLabel = 'Initial 5'
         )
 
-def createInitialTabs():
-    retval = []
-    for x in range(0,30):
-        retval.append(createInitialTab(x*20))
-    return retval
-
-def createAnchorInitialTabs():
-    retval = []
-    for x in range(0,1):
-        retval.append(createAnchorInitialTab(x))
-    return retval
-
 def getTabs():
     return {
         "radioGroupTabs": [ defs.RadioGroupTab(
             documentId = "1",
             groupName = "Radio Group 1",
-            radios = createAnchorRadioTabs(),
+            radios = [ createAnchorRadioTab(0) ],
             recipientId = "1",
             requireInitialOnSharedChange = False,
             shared = False,
             templateLocked = False,
             templateRequired = False
         ) ],
-        "initialHereTabs": createAnchorInitialTabs()
+        "initialHereTabs": [ createAnchorInitialTab(0) ]
     }
-
-#--- display results
-trace("accountId = %s" % accountId);
 
 #construct the body of the request in JSON format
 envelopeDef = json.dumps( defs.Template(

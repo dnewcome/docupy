@@ -12,3 +12,5 @@ get json serializer working more transparently
 
 Find out how to handle fields that return errors when provided
 with null values
+
+replace multiple trace definitions with one
