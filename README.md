@@ -9,3 +9,6 @@ Add rest of unimplemented types
 
 Hide mechanics of Mime
 get json serializer working more transparently
+
+Find out how to handle fields that return errors when provided
+with null values

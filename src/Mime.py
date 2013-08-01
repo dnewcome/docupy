@@ -1,7 +1,8 @@
 class Mime:
     sections = []
     newline = "\r\n"
-    blankline = "\r\n\r\n"
+    #blankline = "\r\n\r\n"
+    blankline = newline + newline 
     boundary = "BOUNDARY"
     
     def __init__(self):

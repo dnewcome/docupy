@@ -1,10 +1,11 @@
-import Mime, unittest
+import src.Mime 
+import unittest
 
 class TestMime(unittest.TestCase):
 
     def test_mime(self):
-        part = Mime.Part("BOUNDARY")
-        fileContents = open("radios.txt", "r").read();
+        part = src.Mime.Mime()
+        fileContents = open("tests/radios.txt", "r").read();
         envelopeDef = '{"some":"json"}'
 
         part.addSection(
