@@ -11,8 +11,10 @@ def trace(msg):
 
 class Docusign:
 
+
     def __init__(self, username, password, integratorKey):
         self.authString = self._authString( username, password, integratorKey )
+        self.headers = {'X-DocuSign-Authentication': self.authString, 'Content-Type': 'multipart/form-data; boundary=BOUNDARY', 'Accept': 'application/json'};
 
     def _authString(self, username, password, integratorKey ):
         return json.dumps({
@@ -74,13 +76,9 @@ class Docusign:
         return response.json();
 
     def sendTemplate(self, file_name, file_data, content_type, envelope_def, document_id):
-    #def sendTemplate(self, requestBody):
         url = self.baseUrl + "/templates";
-        headers = {'X-DocuSign-Authentication': self.authString, 'Content-Type': 'multipart/form-data; boundary=BOUNDARY', 'Accept': 'application/json'};
-
         request_body = self.buildMime(file_name, file_data, content_type, envelope_def, document_id)
-
-        response = requests.post(url, data=request_body, headers=headers)
+        response = requests.post(url, data = request_body, headers = self.headers)
 
         if (response.status_code != 201):
             print("Error sending template, status is: %s\nError description - %s" % (response.status_code, response)); sys.exit();
