@@ -91,24 +91,6 @@ envelopeDef = json.dumps( defs.Template(
     #status = "sent"
 ), cls=JSONRestEncoder )
 
-def buildMime(file_name, file_data, content_type, envelope_def, document_id):
-    mime = Mime()
-    mime.addSection(
-        { 
-            "Content-Type": "application/json",
-            "Content-Disposition": "form-data"
-        },
-        envelope_def 
-    )
-    mime.addSection(
-        { 
-            "Content-Type": content_type,
-            "Content-Disposition": ['file', 'filename="' + file_name + '"', 'documentId=' + str(document_id)]
-        },
-        file_data
-    )
-    trace(mime.write())
-    return mime.write()
 
 class TestSendTemplate(unittest.TestCase):
 
@@ -124,7 +106,7 @@ class TestSendTemplate(unittest.TestCase):
 
         #file_name, file_data, content_type, envelope_def, document_id):
         document_id = 1
-        envId = docusign.sendTemplate(buildMime(filename, filedata, content_type, envelopeDef, document_id)).get('envelopeId')
+        envId = docusign.sendTemplate(filename, filedata, content_type, envelopeDef, document_id).get('envelopeId')
 
 
         #--- display results

@@ -1,4 +1,6 @@
 import requests, json, sys
+from src.Mime import Mime
+
 
 # TRACE = False 
 TRACE = True 
@@ -40,6 +42,25 @@ class Docusign:
         trace("accountId = %s" % loginInfo['accountId'])
         return loginInfo
 
+    def buildMime(self, file_name, file_data, content_type, envelope_def, document_id):
+        mime = Mime()
+        mime.addSection(
+            { 
+                "Content-Type": "application/json",
+                "Content-Disposition": "form-data"
+            },
+            envelope_def 
+        )
+        mime.addSection(
+            { 
+                "Content-Type": content_type,
+                "Content-Disposition": ['file', 'filename="' + file_name + '"', 'documentId=' + str(document_id)]
+            },
+            file_data
+        )
+        trace(mime.write())
+        return mime.write()
+
     def sendEnvelope(self, requestBody ):
         url = self.baseUrl + "/envelopes";
         headers = {
@@ -52,10 +73,14 @@ class Docusign:
             print("Error sending envelope, status is: %s\nError description - %s" % (response.status_code, response)); sys.exit();
         return response.json();
 
-    def sendTemplate(self, requestBody):
+    def sendTemplate(self, file_name, file_data, content_type, envelope_def, document_id):
+    #def sendTemplate(self, requestBody):
         url = self.baseUrl + "/templates";
         headers = {'X-DocuSign-Authentication': self.authString, 'Content-Type': 'multipart/form-data; boundary=BOUNDARY', 'Accept': 'application/json'};
-        response = requests.post(url, data=requestBody, headers=headers)
+
+        request_body = self.buildMime(file_name, file_data, content_type, envelope_def, document_id)
+
+        response = requests.post(url, data=request_body, headers=headers)
 
         if (response.status_code != 201):
             print("Error sending template, status is: %s\nError description - %s" % (response.status_code, response)); sys.exit();
