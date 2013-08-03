@@ -91,34 +91,41 @@ envelopeDef = json.dumps( defs.Template(
     #status = "sent"
 ), cls=JSONRestEncoder )
 
+def buildMime(file_name, file_data, content_type, envelope_def, document_id):
+    mime = Mime()
+    mime.addSection(
+        { 
+            "Content-Type": "application/json",
+            "Content-Disposition": "form-data"
+        },
+        envelope_def 
+    )
+    mime.addSection(
+        { 
+            "Content-Type": content_type,
+            "Content-Disposition": ['file', 'filename="' + file_name + '"', 'documentId=' + str(document_id)]
+        },
+        file_data
+    )
+    trace(mime.write())
+    return mime.write()
+
 class TestSendTemplate(unittest.TestCase):
 
     def test_send_template(self):
-        self.send_template("tests/radios.txt", "plain/txt")
-        self.send_template("tests/radios.pdf", "application/pdf")
+        txtfile = open("tests/radios.txt", "r").read();
+        self.send_template("tests/radios.txt", txtfile, "plain/txt", None)
+        pdffile = open("tests/radios.pdf", "r").read();
+        self.send_template("tests/radios.pdf", pdffile, "application/pdf", None)
     
-    def send_template(self, filename, content_type):
+    def send_template(self, filename, filedata, content_type, metadata):
         # convert the file into a string and add to the request body
         fileContents = open(filename, "r").read();
 
-        mime = Mime()
-        mime.addSection(
-            { 
-                "Content-Type": "application/json",
-                "Content-Disposition": "form-data"
-            },
-            envelopeDef 
-        )
-        mime.addSection(
-            { 
-                "Content-Type": content_type,
-                "Content-Disposition": ['file', 'filename="' + filename + '"', 'documentId=1']
-            },
-            fileContents
-        )
-        trace(mime.write())
+        #file_name, file_data, content_type, envelope_def, document_id):
+        document_id = 1
+        envId = docusign.sendTemplate(buildMime(filename, filedata, content_type, envelopeDef, document_id)).get('envelopeId')
 
-        envId = docusign.sendTemplate(mime.write()).get('envelopeId')
 
         #--- display results
         trace("Document sent! EnvelopeId is: %s\n" % envId);
