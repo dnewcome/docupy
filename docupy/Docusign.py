@@ -1,5 +1,5 @@
 import requests, json, sys
-from src.Mime import Mime
+from docupy.Mime import Mime
 
 # TRACE = False 
 TRACE = True 

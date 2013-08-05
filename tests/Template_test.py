@@ -1,10 +1,10 @@
 import sys, requests, json, unittest
-from src.JSONRecordEncoder import JSONRecordEncoder
+from docupy.JSONRecordEncoder import JSONRecordEncoder
 
 from config import username, password, integratorKey 
-from src.Docusign import Docusign
-from src.Mime import Mime
-from src import defs
+from docupy.Docusign import Docusign
+from docupy.Mime import Mime
+from docupy import defs
 from recordtype import recordtype
 
 # TRACE = False 

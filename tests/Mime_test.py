@@ -1,10 +1,10 @@
-import src.Mime 
+import docupy.Mime 
 import unittest
 
 class TestMime(unittest.TestCase):
 
     def test_mime(self):
-        part = src.Mime.Mime()
+        part = docupy.Mime.Mime()
         fileContents = open("tests/radios.txt", "r").read();
         envelopeDef = '{"some":"json"}'
 

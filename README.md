@@ -15,6 +15,4 @@ with null values
 
 package system is totally non-standard. Need to understand how this is supposed to work
 
-get rid of nonstandard src dir
-
 set up test runner correctly
