@@ -18,8 +18,9 @@ setup(
     keywords = "docusign",
     url = "http://packages.python.org/docupy",
     packages=['docupy'],
-    long_description=read('README.md'),
-    classifiers=[
+    long_description = read('README.md'),
+    install_requires = ['requests >= 1.2.3'],
+    classifiers = [
         "Development Status :: 3 - Alpha",
         "Topic :: Clients",
         "License :: OSI Approved :: BSD License",
