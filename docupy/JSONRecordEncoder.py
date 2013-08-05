@@ -1,7 +1,7 @@
 import json
 
 class JSONRecordEncoder(json.JSONEncoder):
-    """JSON encoder that can handle RestObjects"""
+    """JSON encoder that will serialize recordtypes"""
     def default(self, obj):
         try:
             return obj._asdict()

@@ -1,10 +1,14 @@
+# About
+
 # Usage
+
+# Hacking
 
 Copy config.template.py to config.py and add your docusign credentials.
 Run tests with runtests.sh
 
 # TODO
-get json serializer working more transparently
+
 replace multiple trace definitions with one
 
 Add rest of fields to existing recordtypes
@@ -16,3 +20,5 @@ with null values
 package system is totally non-standard. Need to understand how this is supposed to work
 
 set up test runner correctly
+
+refactor method names to be more pythonic

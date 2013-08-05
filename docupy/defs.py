@@ -1,14 +1,14 @@
 from recordtype import recordtype
 import json
+from JSONRecordEncoder import JSONRecordEncoder 
 
 """
 patch recordtype with json() method
 """
-def json(self):
+def json_dumps(self):
     """Return a json representation of the object"""
-    return json.dumps(self.dict(), cls=JSONRestEncoder) 
+    return json.dumps(self._asdict(), cls=JSONRecordEncoder) 
 
-recordtype.json = json
 
 
 """
@@ -61,6 +61,7 @@ Template = recordtype('Template',
         ("envelopeTemplateDefinition", None)
     ]
 )
+Template.json = json_dumps
 
 EnvelopeTemplateDefinition = recordtype("EnvelopeTemplateDefinition",
     [

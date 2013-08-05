@@ -61,7 +61,7 @@ def getTabs():
     }
 
 #construct the body of the request in JSON format
-envelopeDef = json.dumps( defs.Template(
+template = defs.Template(
     envelopeTemplateDefinition = createEnvelopeTemplateDefinition(),
     emailBlurb = "This comes from Python",
     emailSubject = "API Call for adding signature request to document and sending",
@@ -78,7 +78,9 @@ envelopeDef = json.dumps( defs.Template(
         ) ]
     }
     #status = "sent"
-), cls=JSONRecordEncoder )
+)
+
+envelopeDef = template.json()
 
 
 class TestSendTemplate(unittest.TestCase):
