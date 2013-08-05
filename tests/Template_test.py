@@ -1,4 +1,5 @@
 import sys, requests, json, unittest
+from src.JSONRecordEncoder import JSONRecordEncoder
 
 from config import username, password, integratorKey 
 from src.Docusign import Docusign
@@ -11,18 +12,6 @@ TRACE = True
 
 docusign = Docusign(username, password, integratorKey)
 loginInfo = docusign.login( )
-
-
-"""
-TODO: move encoder
-"""
-class JSONRestEncoder(json.JSONEncoder):
-    """JSON encoder that can handle RestObjects"""
-    def default(self, obj):
-        try:
-            return obj._asdict()
-        except:
-            return json.JSONEncoder.default(self, obj)
 
 def trace(msg):
     if TRACE:
@@ -89,7 +78,7 @@ envelopeDef = json.dumps( defs.Template(
         ) ]
     }
     #status = "sent"
-), cls=JSONRestEncoder )
+), cls=JSONRecordEncoder )
 
 
 class TestSendTemplate(unittest.TestCase):
