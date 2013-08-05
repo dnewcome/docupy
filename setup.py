@@ -17,7 +17,7 @@ setup(
     license = "BSD",
     keywords = "docusign",
     url = "http://packages.python.org/docupy",
-    packages=['src', 'tests'],
+    packages=['docupy'],
     long_description=read('README.md'),
     classifiers=[
         "Development Status :: 3 - Alpha",
