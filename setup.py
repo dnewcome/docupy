@@ -9,20 +9,19 @@ def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 setup(
-    name = "an_example_pypi_project",
-    version = "0.0.4",
-    author = "Andrew Carter",
-    author_email = "andrewjcarter@gmail.com",
-    description = ("An demonstration of how to create, document, and publish "
-                                   "to the cheese shop a5 pypi.org."),
+    name = "docupy",
+    version = "0.0.1",
+    author = "Dan Newcome",
+    author_email = "dnewcome@circleup.com",
+    description = ("A Python client library for Docusign."),
     license = "BSD",
-    keywords = "example documentation tutorial",
-    url = "http://packages.python.org/an_example_pypi_project",
-    packages=['an_example_pypi_project', 'tests'],
-    long_description=read('README'),
+    keywords = "docusign",
+    url = "http://packages.python.org/docupy",
+    packages=['src', 'tests'],
+    long_description=read('README.md'),
     classifiers=[
         "Development Status :: 3 - Alpha",
-        "Topic :: Utilities",
+        "Topic :: Clients",
         "License :: OSI Approved :: BSD License",
     ],
 )
