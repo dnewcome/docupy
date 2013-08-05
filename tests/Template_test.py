@@ -5,6 +5,7 @@ from config import username, password, integratorKey
 from docupy.Docusign import Docusign
 from docupy.Mime import Mime
 from docupy import defs
+from docupy.defs import Template, EnvelopeTemplateDefinition, Document
 from recordtype import recordtype
 
 # TRACE = False 
@@ -103,6 +104,19 @@ class TestSendTemplate(unittest.TestCase):
         #--- display results
         trace("Document sent! EnvelopeId is: %s\n" % envId);
         self.assertTrue(True)
+
+    def test_send_template_minimal(self):
+        filedata = open("tests/radios.txt", "r").read();
+        template = Template(
+            envelopeTemplateDefinition = EnvelopeTemplateDefinition(),
+            documents = [ Document( 
+                documentId = 1, 
+                name = "radios.txt" )
+            ]
+        )
+        print "running minimal test"
+        response = docusign.sendTemplate("radios.txt", filedata, "plain/txt", template.json(), 1)
+        print response.get('envelopeId')
 
 if __name__ == '__main__':
     unittest.main()
