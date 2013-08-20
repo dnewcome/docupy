@@ -28,7 +28,7 @@ class Docusign:
         response = requests.get(url, headers=headers)
 
         if (response.status_code != 200):
-            raise "Error logging in, status is: %s" % response.status_code
+            raise Exception("Error logging in, status is: %s" % response.status_code)
 
         # get the baseUrl and accountId from the response body
         loginInfo = response.json().get('loginAccounts')[0]
@@ -79,6 +79,6 @@ class Docusign:
         response = requests.post(url, data = request_body, headers = self.headers)
 
         if (response.status_code != 201):
-            raise "Error sending file, status is: %s\nError description - %s" % (response.status_code, response)
+            raise Exception("Error sending file, status is: %s\nError description - %s" % (response.status_code, response))
 
         return response.json();

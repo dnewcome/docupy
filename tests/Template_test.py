@@ -85,12 +85,13 @@ envelopeDef = template.json()
 
 
 class TestSendTemplate(unittest.TestCase):
-
+    '''
     def test_send_template(self):
         txtfile = open("tests/radios.txt", "r").read();
         self.send_template("tests/radios.txt", txtfile, "plain/txt", None)
         pdffile = open("tests/radios.pdf", "r").read();
         self.send_template("tests/radios.pdf", pdffile, "application/pdf", None)
+    '''
     
     def send_template(self, filename, filedata, content_type, metadata):
         # convert the file into a string and add to the request body
@@ -107,12 +108,13 @@ class TestSendTemplate(unittest.TestCase):
 
     def test_send_template_minimal(self):
         filedata = open("tests/radios.txt", "r").read();
+        document = Document()
+        document.documentId = 1
+        document.name = "radios.txt"
+
         template = Template(
             envelopeTemplateDefinition = EnvelopeTemplateDefinition(),
-            documents = [ Document( 
-                documentId = 1, 
-                name = "radios.txt" )
-            ]
+            documents = [ document ]
         )
         print "running minimal test"
         response = docusign.sendTemplate("radios.txt", filedata, "plain/txt", template.json(), 1)

@@ -5,5 +5,6 @@ class JSONRecordEncoder(json.JSONEncoder):
     def default(self, obj):
         try:
             return obj._asdict()
-        except:
+        except Exception as e:
+            print e
             return json.JSONEncoder.default(self, obj)

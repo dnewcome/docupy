@@ -1,6 +1,7 @@
 from recordtype import recordtype
 import json
 from JSONRecordEncoder import JSONRecordEncoder 
+from jsonprop import JsonObject, json_field
 
 """
 patch recordtype with json() method
@@ -14,7 +15,6 @@ def json_dumps(self):
 """
 Incomplete definition for Document
 TODO: find rest of fields from docs
-"""
 Document = recordtype("Document",
     [
         #"documentId":"1",
@@ -22,6 +22,20 @@ Document = recordtype("Document",
         ("name", None)
     ]
 )
+"""
+class Document(JsonObject):
+    documentId = json_field('documentId')
+    name = json_field('name')
+
+    def __init__(self, *args, **kwargs):
+        #documentId = kwargs['documentId']
+        #name = kwargs['name']
+        pass
+
+    #@property
+    def _asdict(self):
+        print 'serializing document to dict - ' + str(self._to_json_dict())
+        return self._to_json_dict()
 
 """
 Incomplete definition for Signer 
