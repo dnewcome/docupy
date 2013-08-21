@@ -25,5 +25,3 @@ class TestMime(unittest.TestCase):
         print part.write()
         self.assertTrue(True)
 
-if __name__ == '__main__':
-    unittest.main()

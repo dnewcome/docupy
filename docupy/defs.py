@@ -67,6 +67,7 @@ Template = recordtype('Template',
 )
 Template.json = json_dumps
 
+'''
 EnvelopeTemplateDefinition = recordtype("EnvelopeTemplateDefinition",
     [
         # these fields are all optional
@@ -81,6 +82,34 @@ EnvelopeTemplateDefinition = recordtype("EnvelopeTemplateDefinition",
         ("shared", None)
     ]
 )
+'''
+
+class EnvelopeTemplateDefinition(JsonObject):
+    description = json_field("description", None, True), 
+    name = json_field("name", None, True), 
+
+    #docusign will fail if null pagecount is sent,
+    #field must be omitted completely if null
+    pageCount = json_field("pageCount", None, False), 
+
+    password = json_field("password", None, True), 
+    shared = json_field("shared", None, True), 
+
+    def __init__(self, *args, **kwargs):
+        print 'printing args'
+        print kwargs
+        self.description = kwargs['description']
+        self.name = kwargs["name"]
+
+        #docusign will fail if null pagecount is sent,
+        #field must be omitted completely if null
+        self.pageCount = kwargs["pageCount"]
+
+        self.password = kwargs["password"]
+        self.shared = kwargs["shared"]
+
+    def _asdict(self):
+        return self._to_json_dict()
 
 RadioGroupTab = recordtype("RadioGroupTab",
     [

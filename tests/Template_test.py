@@ -26,7 +26,13 @@ def createAnchorRadioTab(y):
      )
 
 def createEnvelopeTemplateDefinition():
-    return defs.EnvelopeTemplateDefinition() 
+    return defs.EnvelopeTemplateDefinition(
+        description = None,
+        name = None,
+        pageCount = None,
+        password = None,
+        shared = None
+    ) 
 
 def createAnchorInitialTab(y):
     return defs.InitialTab (
@@ -61,37 +67,39 @@ def getTabs():
         "initialHereTabs": [ createAnchorInitialTab(0) ]
     }
 
-#construct the body of the request in JSON format
-template = defs.Template(
-    envelopeTemplateDefinition = createEnvelopeTemplateDefinition(),
-    emailBlurb = "This comes from Python",
-    emailSubject = "API Call for adding signature request to document and sending",
-    documents = [ defs.Document( 
-        documentId = 1, 
-        name = "test.txt" )
-    ],
-    recipients = {
-        "signers": [ defs.Signer(
-            email = username, 
-            name = "name", 
-            recipientId = 1, 
-            tabs = getTabs()
-        ) ]
-    }
-    #status = "sent"
-)
+def createEnvelopeDef():
+	#construct the body of the request in JSON format
+	template = defs.Template(
+		envelopeTemplateDefinition = createEnvelopeTemplateDefinition(),
+		emailBlurb = "This comes from Python",
+		emailSubject = "API Call for adding signature request to document and sending",
+		documents = [ defs.Document( 
+			documentId = 1, 
+			name = "test.txt" )
+		],
+		recipients = {
+			"signers": [ defs.Signer(
+				email = username, 
+				name = "name", 
+				recipientId = 1, 
+				tabs = getTabs()
+			) ]
+		}
+		#status = "sent"
+	)
 
-envelopeDef = template.json()
+	return template.json()
 
 
 class TestSendTemplate(unittest.TestCase):
-    '''
-    def test_send_template(self):
+
+    def test_send_template_txt(self):
         txtfile = open("tests/radios.txt", "r").read();
         self.send_template("tests/radios.txt", txtfile, "plain/txt", None)
+
+    def test_send_template_pdf(self):
         pdffile = open("tests/radios.pdf", "r").read();
         self.send_template("tests/radios.pdf", pdffile, "application/pdf", None)
-    '''
     
     def send_template(self, filename, filedata, content_type, metadata):
         # convert the file into a string and add to the request body
@@ -99,7 +107,7 @@ class TestSendTemplate(unittest.TestCase):
 
         #file_name, file_data, content_type, envelope_def, document_id):
         document_id = 1
-        envId = docusign.sendTemplate(filename, filedata, content_type, envelopeDef, document_id).get('envelopeId')
+        envId = docusign.sendTemplate(filename, filedata, content_type, createEnvelopeDef(), document_id).get('envelopeId')
 
 
         #--- display results
@@ -110,7 +118,7 @@ class TestSendTemplate(unittest.TestCase):
         filedata = open("tests/radios.txt", "r").read();
 
         template = Template(
-            envelopeTemplateDefinition = EnvelopeTemplateDefinition(),
+            envelopeTemplateDefinition = createEnvelopeTemplateDefinition(),
             documents = [ defs.Document( 
                 documentId = 1, 
                 name = "test.txt" )
@@ -120,5 +128,3 @@ class TestSendTemplate(unittest.TestCase):
         response = docusign.sendTemplate("radios.txt", filedata, "plain/txt", template.json(), 1)
         print response.get('envelopeId')
 
-if __name__ == '__main__':
-    unittest.main()
