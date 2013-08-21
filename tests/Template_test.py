@@ -108,13 +108,13 @@ class TestSendTemplate(unittest.TestCase):
 
     def test_send_template_minimal(self):
         filedata = open("tests/radios.txt", "r").read();
-        document = Document()
-        document.documentId = 1
-        document.name = "radios.txt"
 
         template = Template(
             envelopeTemplateDefinition = EnvelopeTemplateDefinition(),
-            documents = [ document ]
+            documents = [ defs.Document( 
+                documentId = 1, 
+                name = "test.txt" )
+            ],
         )
         print "running minimal test"
         response = docusign.sendTemplate("radios.txt", filedata, "plain/txt", template.json(), 1)

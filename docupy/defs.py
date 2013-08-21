@@ -15,26 +15,16 @@ def json_dumps(self):
 """
 Incomplete definition for Document
 TODO: find rest of fields from docs
-Document = recordtype("Document",
-    [
-        #"documentId":"1",
-        ("documentId", None),
-        ("name", None)
-    ]
-)
 """
 class Document(JsonObject):
     documentId = json_field('documentId')
     name = json_field('name')
 
     def __init__(self, *args, **kwargs):
-        #documentId = kwargs['documentId']
-        #name = kwargs['name']
-        pass
+        self.documentId = kwargs['documentId']
+        self.name = kwargs['name']
 
-    #@property
     def _asdict(self):
-        print 'serializing document to dict - ' + str(self._to_json_dict())
         return self._to_json_dict()
 
 """
