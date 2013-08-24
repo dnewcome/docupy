@@ -19,11 +19,11 @@ def trace(msg):
         print msg
 
 def createAnchorRadioTab(y):
-     return defs.RadioTab (
-         anchorString = "Radio-" + str(y),
-         pageNumber = "1",
-         value = "Radio" + str(y)
-     )
+    radio_tab = defs.RadioTab()
+    radio_tab.anchorString = "Radio-" + str(y)
+    radio_tab.pageNumber = "1",
+    radio_tab.value = "Radio" + str(y)
+    return radio_tab
 
 def createEnvelopeTemplateDefinition():
     return defs.EnvelopeTemplateDefinition(
