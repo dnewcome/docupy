@@ -29,14 +29,18 @@ class Document(JsonObject):
 Incomplete definition for Signer 
 TODO: find rest of fields from docs
 """
-Signer = recordtype("Signer",
-    [
-        ("email", None),
-        ("name", None),
-        ("recipientId", None),
-        ("tabs", None) 
-    ]
-)
+class Signer(JsonObject):
+    email = json_field("email", None, True)
+    name = json_field("name", None, True)
+    recipientId = json_field("recipientId", None, True)
+    tabs = json_field("tabs", None, True)
+
+    def __init__(self, **kwargs):
+        for arg in kwargs:
+            setattr(self, arg, kwargs[arg])
+
+    def _asdict(self):
+        return self._to_json_dict()
 
 Template = recordtype('Template', 
     [

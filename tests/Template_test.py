@@ -19,11 +19,11 @@ def trace(msg):
         print msg
 
 def createAnchorRadioTab(y):
-    radio_tab = defs.RadioTab()
-    radio_tab.anchorString = "Radio-" + str(y)
-    radio_tab.pageNumber = "1",
-    radio_tab.value = "Radio" + str(y)
-    return radio_tab
+    return defs.RadioTab(
+        anchorString = "Radio-" + str(y),
+        pageNumber = "1",
+        value = "Radio" + str(y)
+    )  
 
 def createEnvelopeTemplateDefinition():
     return defs.EnvelopeTemplateDefinition(
@@ -35,33 +35,34 @@ def createEnvelopeTemplateDefinition():
     ) 
 
 def createAnchorInitialTab(y):
-    return defs.InitialTab (
-          anchorString = 'Radio-' + str(y),
-          anchorXOffset = 30,
-          anchorYOffset = 25,
-          conditionalParentLabel = 'Radio Group 1',
-          conditionalParentValue = 'Radio' + str(y),
-          documentId = 1,
-          pageNumber = 1,
-          recipientId = 1,
-          templateLocked = False,
-          templateRequired = False,
-          name = 'Initial Here',
-          optional = False,
-          scaleValue = 0.5,
-          tabLabel = 'Initial 5'
-        )
+    return defs.InitialTab(
+        anchorString = 'Radio-' + str(y),
+        anchorXOffset = 30,
+        anchorYOffset = 25,
+        conditionalParentLabel = 'Radio Group 1',
+        conditionalParentValue = 'Radio' + str(y),
+        documentId = 1,
+        pageNumber = 1,
+        recipientId = 1,
+        templateLocked = False,
+        templateRequired = False,
+        name = 'Initial Here',
+        optional = False,
+        scaleValue = 0.5,
+        tabLabel = 'Initial 5'
+    )
 
 def getTabs():
-    radio_group_tab = defs.RadioGroupTab()
-    radio_group_tab.documentId = "1"
-    radio_group_tab.groupName = "Radio Group 1"
-    radio_group_tab.radios = [ createAnchorRadioTab(0) ]
-    radio_group_tab.recipientId = "1"
-    radio_group_tab.requireInitialOnSharedChange = False
-    radio_group_tab.shared = False
-    radio_group_tab.templateLocked = False
-    radio_group_tab.templateRequired = False
+    radio_group_tab = defs.RadioGroupTab(
+        documentId = "1",
+        groupName = "Radio Group 1",
+        radios = [ createAnchorRadioTab(0) ],
+        recipientId = "1",
+        requireInitialOnSharedChange = False,
+        shared = False,
+        templateLocked = False,
+        templateRequired = False
+    )
     return {
         "radioGroupTabs": [radio_group_tab],
         "initialHereTabs": [ createAnchorInitialTab(0) ]
