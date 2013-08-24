@@ -67,22 +67,6 @@ Template = recordtype('Template',
 )
 Template.json = json_dumps
 
-'''
-EnvelopeTemplateDefinition = recordtype("EnvelopeTemplateDefinition",
-    [
-        # these fields are all optional
-        ("description", None), 
-        ("name", None),
-
-        #docusign will fail if null pagecount is sent,
-        #field must be omitted completely if null
-        #("pageCount", None)
-
-        ("password", None),
-        ("shared", None)
-    ]
-)
-'''
 
 class EnvelopeTemplateDefinition(JsonObject):
     description = json_field("description", None, True), 
@@ -111,6 +95,22 @@ class EnvelopeTemplateDefinition(JsonObject):
     def _asdict(self):
         return self._to_json_dict()
 
+class RadioGroupTab(JsonObject):
+    conditionalParentLabel = json_field("conditionalParentLabel", None, True)
+    conditionalParentValue = json_field("conditionalParentValue", None, True)
+    documentId = json_field("documentId", None, True)
+    groupName = json_field("groupName", None, True)
+    radios = json_field("radios", None, True)
+    recipientId = json_field("recipientId", None, True)
+    requireInitialOnSharedChange = json_field("requireInitialOnSharedChange", False, True)
+    shared = json_field("shared", False, True)
+    templateLocked = json_field("templateLocked", False, True)
+    templateRequired = json_field("templateRequired", False, True)
+
+    def _asdict(self):
+        return self._to_json_dict()
+    
+'''
 RadioGroupTab = recordtype("RadioGroupTab",
     [
         ("conditionalParentLabel", None),
@@ -125,6 +125,7 @@ RadioGroupTab = recordtype("RadioGroupTab",
         ("templateRequired", False)
     ]
 )
+'''
 
 RadioTab = recordtype("RadioTab",
     [

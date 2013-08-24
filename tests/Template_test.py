@@ -53,17 +53,17 @@ def createAnchorInitialTab(y):
         )
 
 def getTabs():
+    radio_group_tab = defs.RadioGroupTab()
+    radio_group_tab.documentId = "1"
+    radio_group_tab.groupName = "Radio Group 1"
+    radio_group_tab.radios = [ createAnchorRadioTab(0) ]
+    radio_group_tab.recipientId = "1"
+    radio_group_tab.requireInitialOnSharedChange = False
+    radio_group_tab.shared = False
+    radio_group_tab.templateLocked = False
+    radio_group_tab.templateRequired = False
     return {
-        "radioGroupTabs": [ defs.RadioGroupTab(
-            documentId = "1",
-            groupName = "Radio Group 1",
-            radios = [ createAnchorRadioTab(0) ],
-            recipientId = "1",
-            requireInitialOnSharedChange = False,
-            shared = False,
-            templateLocked = False,
-            templateRequired = False
-        ) ],
+        "radioGroupTabs": [radio_group_tab],
         "initialHereTabs": [ createAnchorInitialTab(0) ]
     }
 
