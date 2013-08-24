@@ -42,31 +42,36 @@ class Signer(JsonObject):
     def _asdict(self):
         return self._to_json_dict()
 
-Template = recordtype('Template', 
-    [
-        ("accessiblity", None),
-        ("allowMarkup", None),
-        ("allowReassign", None),
-        ("allowRecipientRecursion", None),
-        ("asynchronous", None),
-        ("authoritativeCopy", None),
-        ("autoNavigation", None),
-        ("brandId", None),
-        ("emailBlurb", None),
-        ("emailSubject", None),
-        ("enableWetSign", None),
-        ("enforceSignerVisibility", None),
-        ("envelopeIdStamp", None),
-        ("eventNotification", None),
-        ("messageLock", None),
-        ("signingLocation", None),
-        ("customFields", None),
-        ("templateId", None),
-        ("documents", None),
-        ("recipients", None),
-        ("envelopeTemplateDefinition", None)
-    ]
-)
+class Template(JsonObject): 
+    accessiblity = json_field("accessiblity", None)
+    allowMarkup = json_field("allowMarkup", None)
+    allowReassign = json_field("allowReassign", None)
+    allowRecipientRecursion = json_field("allowRecipientRecursion", None)
+    asynchronous = json_field("asynchronous", None)
+    authoritativeCopy = json_field("authoritativeCopy", None)
+    autoNavigation = json_field("autoNavigation", None)
+    brandId = json_field("brandId", None)
+    emailBlurb = json_field("emailBlurb", None)
+    emailSubject = json_field("emailSubject", None)
+    enableWetSign = json_field("enableWetSign", None)
+    enforceSignerVisibility = json_field("enforceSignerVisibility", None)
+    envelopeIdStamp = json_field("envelopeIdStamp", None)
+    eventNotification = json_field("eventNotification", None)
+    messageLock = json_field("messageLock", None)
+    signingLocation = json_field("signingLocation", None)
+    customFields = json_field("customFields", None)
+    templateId = json_field("templateId", None)
+    documents = json_field("documents", None)
+    recipients = json_field("recipients", None)
+    envelopeTemplateDefinition = json_field("envelopeTemplateDefinition", None)
+
+    def __init__(self, **kwargs):
+        for arg in kwargs:
+            setattr(self, arg, kwargs[arg])
+
+    def _asdict(self):
+        return self._to_json_dict()
+
 Template.json = json_dumps
 
 
@@ -180,11 +185,3 @@ class SignHereTab(JsonObject):
     def _asdict(self):
         return self._to_json_dict()
 
-
-"""
-# implementation using namedtuple
-RadioTab = namedtuple("RadioTab",
-    "anchorString anchorXOffset anchorYOffset anchorIgnoreIfNotPresent \
-    anchorUnits pageNumber selected value xPosition yPosition"
-)
-"""
