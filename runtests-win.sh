@@ -1,2 +1,2 @@
-Scripts/python -m unittest tests.Mime_test
-Scripts/python -m unittest tests.Template_test
+Scripts/python -m unittest tests.mime_test
+Scripts/python -m unittest tests.template_test
