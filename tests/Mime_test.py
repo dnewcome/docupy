@@ -22,6 +22,31 @@ class TestMime(unittest.TestCase):
             },
             fileContents
         )
-        print part.write()
-        self.assertTrue(True)
+
+        expected = """--BOUNDARY\r
+Content-Type: application/json\r
+Content-Disposition: form-data\r
+\r
+{"some":"json"}\r
+\r
+--BOUNDARY\r
+Content-Type: application/pdf\r
+Content-Disposition: file; filename="radios.txt"; documentId=1\r
+\r
+Radio-0 item1
+
+Radio-1 item1
+
+Radio-2 item2
+
+Radio-3 item2
+
+
+\r
+\r
+--BOUNDARY--\r
+\r
+"""
+
+        self.assertEquals(expected, part.write())
 

@@ -1,8 +1,8 @@
 import requests, json, sys
 from docupy.Mime import Mime
 
-# TRACE = False 
-TRACE = True 
+TRACE = False 
+#TRACE = True 
 
 def trace(msg):
     if TRACE:
