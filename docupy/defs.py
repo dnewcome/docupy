@@ -1,6 +1,5 @@
 from recordtype import recordtype
 import json
-from JSONRecordEncoder import JSONRecordEncoder 
 from jsonprop import JsonObject, json_field
 
 
