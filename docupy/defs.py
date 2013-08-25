@@ -18,10 +18,6 @@ class Document(JsonObject):
     documentId = json_field('documentId')
     name = json_field('name')
 
-    def __init__(self, **kwargs):
-        for arg in kwargs:
-            setattr(self, arg, kwargs[arg])
-
     def _asdict(self):
         return self._to_json_dict()
 
@@ -34,10 +30,6 @@ class Signer(JsonObject):
     name = json_field("name", None, True)
     recipientId = json_field("recipientId", None, True)
     tabs = json_field("tabs", None, True)
-
-    def __init__(self, **kwargs):
-        for arg in kwargs:
-            setattr(self, arg, kwargs[arg])
 
     def _asdict(self):
         return self._to_json_dict()
@@ -65,10 +57,6 @@ class Template(JsonObject):
     recipients = json_field("recipients", None)
     envelopeTemplateDefinition = json_field("envelopeTemplateDefinition", None)
 
-    def __init__(self, **kwargs):
-        for arg in kwargs:
-            setattr(self, arg, kwargs[arg])
-
     def _asdict(self):
         return self._to_json_dict()
 
@@ -86,10 +74,6 @@ class EnvelopeTemplateDefinition(JsonObject):
     password = json_field("password", None, True), 
     shared = json_field("shared", None, True), 
 
-    def __init__(self, **kwargs):
-        for arg in kwargs:
-            setattr(self, arg, kwargs[arg])
-
     def _asdict(self):
         return self._to_json_dict()
 
@@ -105,10 +89,6 @@ class RadioGroupTab(JsonObject):
     templateLocked = json_field("templateLocked", False, True)
     templateRequired = json_field("templateRequired", False, True)
 
-    def __init__(self, **kwargs):
-        for arg in kwargs:
-            setattr(self, arg, kwargs[arg])
-
     def _asdict(self):
         return self._to_json_dict()
 
@@ -123,10 +103,6 @@ class RadioTab(JsonObject):
     value = json_field("value", None, True)
     xPosition = json_field("xPosition", 0, True)
     yPosition = json_field("yPosition", 0, True)
-
-    def __init__(self, **kwargs):
-        for arg in kwargs:
-            setattr(self, arg, kwargs[arg])
 
     def _asdict(self):
         return self._to_json_dict()
@@ -151,10 +127,6 @@ class InitialTab(JsonObject):
     scaleValue = json_field("scaleValue", None, True)
     tabLabel = json_field("tabLabel", None, True)
 
-    def __init__(self, **kwargs):
-        for arg in kwargs:
-            setattr(self, arg, kwargs[arg])
-
     def _asdict(self):
         return self._to_json_dict()
 
@@ -177,10 +149,6 @@ class SignHereTab(JsonObject):
     optional = json_field("optional", None, True)
     scaleValue = json_field("scaleValue", None, True)
     tabLabel = json_field("tabLabel", None, True)
-
-    def __init__(self, **kwargs):
-        for arg in kwargs:
-            setattr(self, arg, kwargs[arg])
 
     def _asdict(self):
         return self._to_json_dict()
