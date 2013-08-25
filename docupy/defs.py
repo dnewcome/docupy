@@ -3,12 +3,6 @@ import json
 from JSONRecordEncoder import JSONRecordEncoder 
 from jsonprop import JsonObject, json_field
 
-"""
-patch recordtype with json() method
-"""
-def json_dumps(self):
-    """Return a json representation of the object"""
-    return json.dumps(self._asdict(), cls=JSONRecordEncoder) 
 
 """
 Incomplete definition for Document
@@ -17,9 +11,6 @@ TODO: find rest of fields from docs
 class Document(JsonObject):
     documentId = json_field('documentId')
     name = json_field('name')
-
-    def _asdict(self):
-        return self._to_json_dict()
 
 """
 Incomplete definition for Signer 
@@ -30,9 +21,6 @@ class Signer(JsonObject):
     name = json_field("name", None, True)
     recipientId = json_field("recipientId", None, True)
     tabs = json_field("tabs", None, True)
-
-    def _asdict(self):
-        return self._to_json_dict()
 
 class Template(JsonObject): 
     accessiblity = json_field("accessiblity", None)
@@ -57,12 +45,6 @@ class Template(JsonObject):
     recipients = json_field("recipients", None)
     envelopeTemplateDefinition = json_field("envelopeTemplateDefinition", None)
 
-    def _asdict(self):
-        return self._to_json_dict()
-
-Template.json = json_dumps
-
-
 class EnvelopeTemplateDefinition(JsonObject):
     description = json_field("description", None, True), 
     name = json_field("name", None, True), 
@@ -73,9 +55,6 @@ class EnvelopeTemplateDefinition(JsonObject):
 
     password = json_field("password", None, True), 
     shared = json_field("shared", None, True), 
-
-    def _asdict(self):
-        return self._to_json_dict()
 
 class RadioGroupTab(JsonObject):
     conditionalParentLabel = json_field("conditionalParentLabel", None, True)
@@ -89,9 +68,6 @@ class RadioGroupTab(JsonObject):
     templateLocked = json_field("templateLocked", False, True)
     templateRequired = json_field("templateRequired", False, True)
 
-    def _asdict(self):
-        return self._to_json_dict()
-
 class RadioTab(JsonObject):
     anchorString = json_field("anchorString", None, True)
     anchorXOffset = json_field("anchorXOffset", 0, True) 
@@ -103,9 +79,6 @@ class RadioTab(JsonObject):
     value = json_field("value", None, True)
     xPosition = json_field("xPosition", 0, True)
     yPosition = json_field("yPosition", 0, True)
-
-    def _asdict(self):
-        return self._to_json_dict()
 
 class InitialTab(JsonObject):
     anchorString = json_field("anchorString", None, True)
@@ -127,9 +100,6 @@ class InitialTab(JsonObject):
     scaleValue = json_field("scaleValue", None, True)
     tabLabel = json_field("tabLabel", None, True)
 
-    def _asdict(self):
-        return self._to_json_dict()
-
 class SignHereTab(JsonObject):
     anchorString = json_field("anchorString", None, True)
     anchorXOffset = json_field("anchorXOffset", 0, True)
@@ -149,7 +119,4 @@ class SignHereTab(JsonObject):
     optional = json_field("optional", None, True)
     scaleValue = json_field("scaleValue", None, True)
     tabLabel = json_field("tabLabel", None, True)
-
-    def _asdict(self):
-        return self._to_json_dict()
 
