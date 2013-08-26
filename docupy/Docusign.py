@@ -36,6 +36,19 @@ class Docusign:
         trace("accountId = %s" % loginInfo['accountId'])
         return loginInfo
 
+    ### TODO: STUB ###
+    def change_password(self):
+        url = self.baseUrl + "/login_information/password"
+        headers = {
+            'X-DocuSign-Authentication': self.authString,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+        response = requests.put(url, headers=headers, data={})
+
+    def get_recipient_tabs(self):
+
+        url = self.baseUrl + "/accounts/{accountId}/envelopes/{envelopeId}/recipients/{recipientId}/tabs"
 
     def sendEnvelope(self, file_name, file_data, content_type, envelope_def, document_id):
         """Docusign API call for sending a signature envelope"""
