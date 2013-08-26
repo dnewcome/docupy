@@ -1,5 +1,7 @@
 # About
 
+Docupy is a Docusign client library for Python.
+
 # Usage
 
     from docupy.Docusign import Docusign
@@ -18,8 +20,7 @@
 
 # Design
 
-Using python recortypes for conicse definition of Docusign data types. 
-It's possible that we'll need to just use plain python claseses anyway.
+Using jsonprop for conicse definition of Docusign data types and JSON serialization control. 
 
 # Hacking
 
@@ -28,16 +29,8 @@ Run tests with runtests.sh. Docusign data types are defined in defs.py.
 
 # TODO
 
-replace multiple trace definitions with one
-
-Add rest of fields to existing recordtypes
+Add logging
+Add rest of fields to some defs 
 Add rest of unimplemented Docusign data types
-
-Find out how to handle fields that return errors when provided
-with null values.
-
 package system is totally non-standard. Need to understand how this is supposed to work
-
-set up test runner correctly
-
 refactor method names to be more pythonic
